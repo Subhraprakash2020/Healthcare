@@ -22,5 +22,4 @@ jobs:
           cache: maven
 
       - name: Build & Test
-        working-directory: ./Healthcare
         run: mvn -B clean install
