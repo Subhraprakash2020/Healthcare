@@ -1,0 +1,57 @@
+package com.healthcare.patient.model;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Document(collection = "patients")
+public class Patient {
+  @Transient public static final String SEQUENCE_NAME = "patients_sequence";
+
+  @Id private long id;
+
+  @NotBlank
+  @Size(max = 100)
+  @Indexed(unique = true)
+  private String firstName;
+
+  @NotBlank
+  @Size(max = 100)
+  @Indexed(unique = true)
+  private String lastName;
+
+  @NotBlank
+  @Size(max = 100)
+  @Indexed(unique = true)
+  private int age;
+
+  @NotBlank
+  @Size(max = 200)
+  @Indexed(unique = true)
+  private String address;
+
+  @NotBlank
+  @Size(max = 100)
+  @Indexed(unique = true)
+  private String phoneNumber;
+
+  @NotBlank
+  @Size(max = 100)
+  @Indexed(unique = true)
+  private String email;
+
+  @NotBlank
+  @Indexed(unique = true)
+  private Gender gender;
+}
