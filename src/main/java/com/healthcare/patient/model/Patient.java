@@ -1,4 +1,4 @@
-package com.healthcare.Healthcare.patient.model;
+package com.healthcare.patient.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

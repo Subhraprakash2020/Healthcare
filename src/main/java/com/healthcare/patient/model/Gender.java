@@ -1,4 +1,4 @@
-package com.healthcare.Healthcare.patient.model;
+package com.healthcare.patient.model;
 
 public enum Gender {
   MALE,

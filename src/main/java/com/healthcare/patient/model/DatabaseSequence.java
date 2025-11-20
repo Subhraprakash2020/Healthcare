@@ -1,4 +1,4 @@
-package com.healthcare.Healthcare.patient.model;
+package com.healthcare.patient.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,6 +1,6 @@
-package com.healthcare.Healthcare.patient.service;
+package com.healthcare.patient.service;
 
-import com.healthcare.Healthcare.patient.model.Patient;
+import com.healthcare.patient.model.Patient;
 import java.util.List;
 
 public interface PatientService {

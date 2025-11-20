@@ -1,7 +1,7 @@
-package com.healthcare.Healthcare.patient.service;
+package com.healthcare.patient.service;
 
-import com.healthcare.Healthcare.patient.model.Patient;
-import com.healthcare.Healthcare.patient.repository.PatientRepository;
+import com.healthcare.patient.model.Patient;
+import com.healthcare.patient.repository.PatientRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

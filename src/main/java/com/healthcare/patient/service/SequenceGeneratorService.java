@@ -1,10 +1,10 @@
-package com.healthcare.Healthcare.patient.service;
+package com.healthcare.patient.service;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-import com.healthcare.Healthcare.patient.model.DatabaseSequence;
+import com.healthcare.patient.model.DatabaseSequence;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;

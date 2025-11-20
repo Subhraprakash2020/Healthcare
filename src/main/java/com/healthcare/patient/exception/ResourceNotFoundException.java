@@ -1,4 +1,4 @@
-package com.healthcare.Healthcare.patient.exception;
+package com.healthcare.patient.exception;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 

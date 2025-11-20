@@ -1,8 +1,8 @@
-package com.healthcare.Healthcare.patient.controller;
+package com.healthcare.patient.controller;
 
-import com.healthcare.Healthcare.patient.model.Patient;
-import com.healthcare.Healthcare.patient.repository.PatientRepository;
-import com.healthcare.Healthcare.patient.service.SequenceGeneratorService;
+import com.healthcare.patient.model.Patient;
+import com.healthcare.patient.repository.PatientRepository;
+import com.healthcare.patient.service.SequenceGeneratorService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
