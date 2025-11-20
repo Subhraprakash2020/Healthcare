@@ -81,30 +81,6 @@
         </plugin>
 
         <!-- ==========================================================
-             CHECKSTYLE (Indentation + Spacing, No Javadoc Required)
-             ========================================================== -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.3.1</version>
-            <configuration>
-                <configLocation>config/checkstyle/checkstyle.xml</configLocation>
-                <failOnViolation>true</failOnViolation>
-                <encoding>UTF-8</encoding>
-                <consoleOutput>true</consoleOutput>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>checkstyle-validation</id>
-                    <phase>validate</phase>
-                    <goals>
-                        <goal>check</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-
-        <!-- ==========================================================
              SPOTLESS (Auto-Fix Formatting)
              ========================================================== -->
         <plugin>
