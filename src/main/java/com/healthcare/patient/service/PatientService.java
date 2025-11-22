@@ -7,4 +7,6 @@ public interface PatientService {
   Patient createPatient(Patient patient);
 
   List<Patient> getAllPatients();
+
+  String getEmail();
 }

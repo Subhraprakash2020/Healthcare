@@ -1,6 +1,7 @@
 package com.healthcare.patient.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "patients")
 public class Patient {
   @Transient public static final String SEQUENCE_NAME = "patients_sequence";
-  
+
   @Id private long id;
 
   @NotBlank
@@ -31,10 +32,9 @@ public class Patient {
   @Indexed(unique = true)
   private String lastName;
 
-  @NotBlank
-  @Size(max = 100)
+  @NotNull
   @Indexed(unique = true)
-  private int age;
+  private Integer age;
 
   @NotBlank
   @Size(max = 200)
@@ -51,7 +51,17 @@ public class Patient {
   @Indexed(unique = true)
   private String email;
 
-  @NotBlank
+  @NotNull
   @Indexed(unique = true)
   private Gender gender;
+
+  @NotBlank
+  @Size(max = 100)
+  @Indexed(unique = true)
+  private String password;
+
+  public Patient(String email, String password) {
+    this.email = email;
+    this.password = password;
+  }
 }
