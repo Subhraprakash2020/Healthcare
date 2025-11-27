@@ -20,7 +20,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "patients")
-public class Patient implements Persistable<Long>{
+public class Patient implements Persistable<Long> {
   @Transient public static final String SEQUENCE_NAME = "patients_sequence";
 
   @Id private long id;
@@ -71,13 +71,13 @@ public class Patient implements Persistable<Long>{
   }
 
   @Override
-    public Long getId() {
-        return this.id;
-    }
+  public Long getId() {
+    return this.id;
+  }
 
-    @Override
-    @Transient
-    public boolean isNew() {
-        return this.createdAt == null;
-    }
+  @Override
+  @Transient
+  public boolean isNew() {
+    return this.createdAt == null;
+  }
 }
