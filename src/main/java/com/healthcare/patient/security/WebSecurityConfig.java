@@ -21,61 +21,59 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private final CommonUserDetailsService commonUserDetailsService;
-    private final AuthEntryPointJwt unauthorizedHandler;
+  private final CommonUserDetailsService commonUserDetailsService;
+  private final AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(commonUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+  @Bean
+  public DaoAuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setUserDetailsService(commonUserDetailsService);
+    authProvider.setPasswordEncoder(passwordEncoder());
+    return authProvider;
+  }
 
-    @Bean
-    public AuthTokenFilter authTokenFilter() {
-        return new AuthTokenFilter();
-    }
+  @Bean
+  public AuthTokenFilter authTokenFilter() {
+    return new AuthTokenFilter();
+  }
 
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+      throws Exception {
+    return config.getAuthenticationManager();
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-            throws Exception {
-        return config.getAuthenticationManager();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.csrf(csrf -> csrf.disable())
-            .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authorizeHttpRequests(auth -> auth
-
-                .requestMatchers(
+    http.csrf(csrf -> csrf.disable())
+        .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers(
                         "/healthcare/signin",
                         "/healthcare/signup",
                         "/healthcare/admins/signin",
-                        "/healthcare/admins/signup"
-                ).permitAll()
+                        "/healthcare/admins/signup")
+                    .permitAll()
+                    .requestMatchers("/healthcare/admins/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/healthcare/patient/**")
+                    .hasRole("PATIENT")
+                    .anyRequest()
+                    .authenticated());
 
-                .requestMatchers("/healthcare/admins/**").hasRole("ADMIN")
-                .requestMatchers("/healthcare/patient/**").hasRole("PATIENT")
+    http.authenticationProvider(authenticationProvider());
 
-                .anyRequest().authenticated()
-            );
+    http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
+    return http.build();
+  }
 }

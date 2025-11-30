@@ -19,9 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired private JwtUtils jwtUtils;
 
-  @Autowired
-  private CommonUserDetailsService userDetailsService;
-
+  @Autowired private CommonUserDetailsService userDetailsService;
 
   private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 

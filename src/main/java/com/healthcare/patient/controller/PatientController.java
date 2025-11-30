@@ -56,38 +56,30 @@ public class PatientController {
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-      Authentication authentication =
-              authenticationManager.authenticate(
-                      new UsernamePasswordAuthenticationToken(
-                              loginRequest.getEmail(), loginRequest.getPassword()));
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), loginRequest.getPassword()));
 
-      SecurityContextHolder.getContext().setAuthentication(authentication);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-      String jwt = jwtUtils.generateJwtToken(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
 
-      // Use common interface, not direct casting!
-      UserDetails principal = (UserDetails) authentication.getPrincipal();
+    // Use common interface, not direct casting!
+    UserDetails principal = (UserDetails) authentication.getPrincipal();
 
-      Long id = null;
-      String username = principal.getUsername();
-      String email = null;
+    Long id = null;
+    String username = principal.getUsername();
+    String email = null;
 
-      // Extract patient-specific fields only if principal is a Patient user
-      if (principal instanceof UserDetailsImpl patientDetails) {
-          id = patientDetails.getId();
-          email = patientDetails.getEmail();
-      }
+    // Extract patient-specific fields only if principal is a Patient user
+    if (principal instanceof UserDetailsImpl patientDetails) {
+      id = patientDetails.getId();
+      email = patientDetails.getEmail();
+    }
 
-      return ResponseEntity.ok(
-              new JwtResponse(
-                      jwt,
-                      id,
-                      username,
-                      email
-              )
-      );
+    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email));
   }
-
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {

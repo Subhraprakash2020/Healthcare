@@ -47,34 +47,30 @@ public class AdminController {
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateAdmin(
-          @Valid @RequestBody LoginRequestAdmin loginRequestAdmin) {
+      @Valid @RequestBody LoginRequestAdmin loginRequestAdmin) {
 
-      Authentication authentication =
-              authenticationManager.authenticate(
-                      new UsernamePasswordAuthenticationToken(
-                              loginRequestAdmin.getEmail(), loginRequestAdmin.getPassword()));
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequestAdmin.getEmail(), loginRequestAdmin.getPassword()));
 
-      SecurityContextHolder.getContext().setAuthentication(authentication);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-      String jwt = jwtUtils.generateJwtToken(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
 
-      Object principal = authentication.getPrincipal();
+    Object principal = authentication.getPrincipal();
 
-      Long id = null;
-      String username = null;
-      String email = null;
+    Long id = null;
+    String username = null;
+    String email = null;
 
-      if (principal instanceof AdminUserDetailsImpl adminDetails) {
-          id = adminDetails.getId();
-          username = adminDetails.getUsername();
-          email = adminDetails.getEmail();
-      }
+    if (principal instanceof AdminUserDetailsImpl adminDetails) {
+      id = adminDetails.getId();
+      username = adminDetails.getUsername();
+      email = adminDetails.getEmail();
+    }
 
-      return ResponseEntity.ok(
-              "JWT: " + jwt
-                      + ", ID: " + id
-                      + ", Username: " + username
-                      + ", Email: " + email
-      );
+    return ResponseEntity.ok(
+        "JWT: " + jwt + ", ID: " + id + ", Username: " + username + ", Email: " + email);
   }
 }
