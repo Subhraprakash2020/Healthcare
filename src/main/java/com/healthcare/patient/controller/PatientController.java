@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,20 +56,38 @@ public class PatientController {
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), loginRequest.getPassword()));
+      Authentication authentication =
+              authenticationManager.authenticate(
+                      new UsernamePasswordAuthenticationToken(
+                              loginRequest.getEmail(), loginRequest.getPassword()));
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    String jwt = jwtUtils.generateJwtToken(authentication);
+      SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      String jwt = jwtUtils.generateJwtToken(authentication);
 
-    return ResponseEntity.ok(
-        new JwtResponse(
-            jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
+      // Use common interface, not direct casting!
+      UserDetails principal = (UserDetails) authentication.getPrincipal();
+
+      Long id = null;
+      String username = principal.getUsername();
+      String email = null;
+
+      // Extract patient-specific fields only if principal is a Patient user
+      if (principal instanceof UserDetailsImpl patientDetails) {
+          id = patientDetails.getId();
+          email = patientDetails.getEmail();
+      }
+
+      return ResponseEntity.ok(
+              new JwtResponse(
+                      jwt,
+                      id,
+                      username,
+                      email
+              )
+      );
   }
+
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {

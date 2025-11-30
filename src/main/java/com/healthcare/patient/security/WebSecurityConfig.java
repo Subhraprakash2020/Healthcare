@@ -2,7 +2,7 @@ package com.healthcare.patient.security;
 
 import com.healthcare.patient.security.jwt.AuthEntryPointJwt;
 import com.healthcare.patient.security.jwt.AuthTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,69 +11,71 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-// @EnableWebSecurity
 @EnableMethodSecurity
-// (securedEnabled = true,
-// jsr250Enabled = true,
-// prePostEnabled = true) // by default
-public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-  @Autowired private UserDetailsService patientServiceImpl;
+@RequiredArgsConstructor
+public class WebSecurityConfig {
 
-  @Autowired private AuthEntryPointJwt unauthorizedHandler;
+    private final CommonUserDetailsService commonUserDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
-  @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter() {
-    return new AuthTokenFilter();
-  }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(commonUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
-  @Bean
-  public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    @Bean
+    public AuthTokenFilter authTokenFilter() {
+        return new AuthTokenFilter();
+    }
 
-    authProvider.setUserDetailsService(patientServiceImpl);
-    authProvider.setPasswordEncoder(passwordEncoder());
 
-    return authProvider;
-  }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+            throws Exception {
+        return config.getAuthenticationManager();
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)
-      throws Exception {
-    return authConfig.getAuthenticationManager();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable())
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers("/healthcare/signin", "/healthcare/signup")
-                    .permitAll()
-                    .requestMatchers("/api/test/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated());
+        http.csrf(csrf -> csrf.disable())
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .authorizeHttpRequests(auth -> auth
 
-    http.authenticationProvider(authenticationProvider());
+                .requestMatchers(
+                        "/healthcare/signin",
+                        "/healthcare/signup",
+                        "/healthcare/admins/signin",
+                        "/healthcare/admins/signup"
+                ).permitAll()
 
-    http.addFilterBefore(
-        authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .requestMatchers("/healthcare/admins/**").hasRole("ADMIN")
+                .requestMatchers("/healthcare/patient/**").hasRole("PATIENT")
 
-    return http.build();
-  }
+                .anyRequest().authenticated()
+            );
+
+        http.authenticationProvider(authenticationProvider());
+
+        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }
