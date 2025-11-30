@@ -2,7 +2,7 @@ package com.healthcare.patient.security;
 
 import com.healthcare.patient.security.jwt.AuthEntryPointJwt;
 import com.healthcare.patient.security.jwt.AuthTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,42 +11,36 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-// @EnableWebSecurity
 @EnableMethodSecurity
-// (securedEnabled = true,
-// jsr250Enabled = true,
-// prePostEnabled = true) // by default
-public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-  @Autowired private UserDetailsService patientServiceImpl;
+@RequiredArgsConstructor
+public class WebSecurityConfig {
 
-  @Autowired private AuthEntryPointJwt unauthorizedHandler;
-
-  @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter() {
-    return new AuthTokenFilter();
-  }
+  private final CommonUserDetailsService commonUserDetailsService;
+  private final AuthEntryPointJwt unauthorizedHandler;
 
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-    authProvider.setUserDetailsService(patientServiceImpl);
+    authProvider.setUserDetailsService(commonUserDetailsService);
     authProvider.setPasswordEncoder(passwordEncoder());
-
     return authProvider;
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)
+  public AuthTokenFilter authTokenFilter() {
+    return new AuthTokenFilter();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
       throws Exception {
-    return authConfig.getAuthenticationManager();
+    return config.getAuthenticationManager();
   }
 
   @Bean
@@ -56,23 +50,29 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
     http.csrf(csrf -> csrf.disable())
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+        .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/healthcare/signin", "/healthcare/signup")
+                auth.requestMatchers(
+                        "/healthcare/signin",
+                        "/healthcare/signup",
+                        "/healthcare/admins/signin",
+                        "/healthcare/admins/signup")
                     .permitAll()
-                    .requestMatchers("/api/test/**")
-                    .permitAll()
+                    .requestMatchers("/healthcare/admins/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/healthcare/patient/**")
+                    .hasRole("PATIENT")
                     .anyRequest()
                     .authenticated());
 
     http.authenticationProvider(authenticationProvider());
 
-    http.addFilterBefore(
-        authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

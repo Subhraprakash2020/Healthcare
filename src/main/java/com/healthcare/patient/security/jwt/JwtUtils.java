@@ -1,6 +1,5 @@
 package com.healthcare.patient.security.jwt;
 
-import com.healthcare.patient.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -10,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,10 +24,14 @@ public class JwtUtils {
 
   public String generateJwtToken(Authentication authentication) {
 
-    UserDetailsImpl patientPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    // Do NOT cast — use common type
+    UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+
+    // username = email in your system (Admin + Patient)
+    String username = userPrincipal.getUsername();
 
     return Jwts.builder()
-        .setSubject((patientPrincipal.getEmail()))
+        .setSubject(username)
         .setIssuedAt(new Date())
         .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
         .signWith(key(), SignatureAlgorithm.HS256)
