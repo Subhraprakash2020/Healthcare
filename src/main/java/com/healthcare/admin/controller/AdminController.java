@@ -81,7 +81,7 @@ public class AdminController {
         "JWT: " + jwt + ", ID: " + id + ", Username: " + username + ", Email: " + email);
   }
 
-  private AdminService adminService;
+  @Autowired private AdminService adminService;
 
   @GetMapping("/patients")
   public ResponseEntity<List<Patient>> getListOfPatients() {
