@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.healthcare.admin.services.AdminService;
+import com.healthcare.patient.model.Patient;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+
 
 @RestController
 @RequestMapping("/healthcare/admin")
@@ -41,6 +47,7 @@ public class AdminController {
     admin.setUsername(signUpRequestAdmin.getUsername());
     admin.setEmail(signUpRequestAdmin.getEmail());
     admin.setPassword(encoder.encode(signUpRequestAdmin.getPassword()));
+    admin.setRole("ADMIN");
     adminRepository.save(admin);
     return ResponseEntity.ok("Admin registered successfully!");
   }
@@ -72,5 +79,13 @@ public class AdminController {
 
     return ResponseEntity.ok(
         "JWT: " + jwt + ", ID: " + id + ", Username: " + username + ", Email: " + email);
+  }
+
+  private AdminService adminService;
+
+  @GetMapping("/patients")
+  public ResponseEntity<List<Patient>> getListOfPatients() {
+    System.out.println("**Printing List of Patients**");
+    return new ResponseEntity<>(adminService.getListOfPatients(), HttpStatus.OK);
   }
 }
