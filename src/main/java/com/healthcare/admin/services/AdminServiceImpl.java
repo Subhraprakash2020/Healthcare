@@ -3,6 +3,8 @@ package com.healthcare.admin.services;
 import com.healthcare.admin.model.Admin;
 import com.healthcare.admin.repository.AdminRepository;
 import com.healthcare.admin.security.services.AdminUserDetailsImpl;
+import com.healthcare.patient.model.Patient;
+import com.healthcare.patient.service.PatientService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.healthcare.patient.model.Patient;
-import com.healthcare.patient.service.PatientService;
-
 
 @Service
 public class AdminServiceImpl implements AdminService, UserDetailsService {
@@ -50,7 +49,6 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
 
     return AdminUserDetailsImpl.build(admin);
   }
-  
 
   @Autowired private PatientService patientService;
 

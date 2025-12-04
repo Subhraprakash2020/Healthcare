@@ -54,7 +54,7 @@ public class AdminUserDetailsImpl implements UserDetails {
 
   @Override
   public String getUsername() {
-    return email;  // IMPORTANT: use email as username
+    return email; // IMPORTANT: use email as username
   }
 
   public Long getId() {
