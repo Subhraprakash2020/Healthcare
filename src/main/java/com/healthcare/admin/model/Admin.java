@@ -26,5 +26,7 @@ public class Admin {
 
   @NotBlank private String password;
 
+  private String role;
+
   private Date createdAt = new Date();
 }
