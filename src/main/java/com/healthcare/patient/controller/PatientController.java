@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/healthcare")
+@RequestMapping("/healthcare/patient")
 public class PatientController {
   @Autowired private PatientRepository patientRepository;
 
@@ -98,6 +98,7 @@ public class PatientController {
     patient.setPhoneNumber(signUpRequest.getPhoneNumber());
     patient.setEmail(signUpRequest.getEmail());
     patient.setGender(signUpRequest.getGender());
+    patient.setRole("PATIENT");
     patient.setPassword(encoder.encode(signUpRequest.getPassword()));
 
     patientRepository.save(patient);

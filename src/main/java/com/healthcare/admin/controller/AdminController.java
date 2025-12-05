@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/healthcare/admins")
+@RequestMapping("/healthcare/admin")
 public class AdminController {
   @Autowired private SequenceGeneratorService sequenceGeneratorService;
   @Autowired private AdminRepository adminRepository;

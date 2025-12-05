@@ -58,12 +58,12 @@ public class WebSecurityConfig {
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(
-                        "/healthcare/signin",
-                        "/healthcare/signup",
-                        "/healthcare/admins/signin",
-                        "/healthcare/admins/signup")
+                        "/healthcare/patient/signin",
+                        "/healthcare/patient/signup",
+                        "/healthcare/admin/signin",
+                        "/healthcare/admin/signup")
                     .permitAll()
-                    .requestMatchers("/healthcare/admins/**")
+                    .requestMatchers("/healthcare/admin/**")
                     .hasRole("ADMIN")
                     .requestMatchers("/healthcare/patient/**")
                     .hasRole("PATIENT")
