@@ -31,12 +31,12 @@ public class ProviderService {
     Provider nonNullProvider = Objects.requireNonNull(provider, "Provider cannot be null");
     providerRepository.save(nonNullProvider);
   }
+
   public void updateProvider(Provider provider) {
     // Implementation to update an existing provider
     Provider nonNullProvider = Objects.requireNonNull(provider, "Provider cannot be null");
     providerRepository.save(nonNullProvider);
   }
-  
 
   public void deleteProvider(Long id) {
     // Implementation to delete a provider by id

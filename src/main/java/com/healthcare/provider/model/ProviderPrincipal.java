@@ -9,79 +9,77 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class ProviderPrincipal implements UserDetails {
 
-    private Long id;
-    private String username;
-    private String email;
-    private String passWord;
-    private Collection<? extends GrantedAuthority> authorities;
+  private Long id;
+  private String username;
+  private String email;
+  private String passWord;
+  private Collection<? extends GrantedAuthority> authorities;
 
-    private ProviderPrincipal(
-            Long id,
-            String username,
-            String email,
-            String passWord,
-            Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.passWord = passWord;
-        this.authorities = authorities;
-    }
+  private ProviderPrincipal(
+      Long id,
+      String username,
+      String email,
+      String passWord,
+      Collection<? extends GrantedAuthority> authorities) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.passWord = passWord;
+    this.authorities = authorities;
+  }
 
-    public static ProviderPrincipal build(Provider provider) {
-        List<GrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_PROVIDER")
-        );
+  public static ProviderPrincipal build(Provider provider) {
+    List<GrantedAuthority> authorities =
+        Collections.singletonList(new SimpleGrantedAuthority("ROLE_PROVIDER"));
 
-        return new ProviderPrincipal(
-                provider.getId(),
-                provider.getUsername(),
-                provider.getEmail(),
-                provider.getPassWord(),
-                authorities
-        );
-    }
+    return new ProviderPrincipal(
+        provider.getId(),
+        provider.getUsername(),
+        provider.getEmail(),
+        provider.getPassWord(),
+        authorities);
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;   // ✅ return stored authorities
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return authorities; // ✅ return stored authorities
+  }
 
-    @Override
-    public String getPassword() {
-        return passWord;       // ✅ safe
-    }
+  @Override
+  public String getPassword() {
+    return passWord; // ✅ safe
+  }
 
-    @Override
-    public String getUsername() {
-        return username;       // ✅ safe
-    }
+  @Override
+  public String getUsername() {
+    return username; // ✅ safe
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

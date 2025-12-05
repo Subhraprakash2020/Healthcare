@@ -1,6 +1,5 @@
 package com.healthcare.provider.service;
 
-import com.healthcare.admin.security.services.AdminUserDetailsImpl;
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.model.ProviderPrincipal;
