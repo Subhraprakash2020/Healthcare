@@ -3,7 +3,6 @@ package com.healthcare.patient.security.services;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.healthcare.patient.model.Patient;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,7 +36,8 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   public static UserDetailsImpl build(Patient patient) {
-    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + patient.getRole()));
+    List<GrantedAuthority> authorities =
+        List.of(new SimpleGrantedAuthority("ROLE_" + patient.getRole()));
 
     return new UserDetailsImpl(
         patient.getId(),
