@@ -63,6 +63,8 @@ public class Patient implements Persistable<Long> {
   @Indexed(unique = true)
   private String password;
 
+  private String role;
+
   @CreatedDate private Date createdAt;
 
   public Patient(String email, String password) {
