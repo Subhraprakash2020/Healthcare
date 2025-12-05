@@ -3,6 +3,8 @@ package com.healthcare.admin.services;
 import com.healthcare.admin.model.Admin;
 import com.healthcare.admin.repository.AdminRepository;
 import com.healthcare.admin.security.services.AdminUserDetailsImpl;
+import com.healthcare.patient.model.Patient;
+import com.healthcare.patient.service.PatientService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,5 +48,12 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
                 () -> new UsernameNotFoundException("Admin Not Found with email: " + email));
 
     return AdminUserDetailsImpl.build(admin);
+  }
+
+  @Autowired private PatientService patientService;
+
+  public List<Patient> getListOfPatients() {
+    System.out.println("**Printing List of Patients in Admin Service**");
+    return patientService.getAllPatients();
   }
 }

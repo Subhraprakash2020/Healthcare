@@ -2,13 +2,12 @@ package com.healthcare.admin.security.services;
 
 import com.healthcare.admin.model.Admin;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class AdminUserDetailsImpl implements UserDetails {
-  private static final long serialVersionUID = 1L;
 
   private Long id;
   private String username;
@@ -31,10 +30,16 @@ public class AdminUserDetailsImpl implements UserDetails {
   }
 
   public static AdminUserDetailsImpl build(Admin admin) {
-    List<GrantedAuthority> authorities = Collections.emptyList();
+    // Take role from DB and convert into Spring role
+    GrantedAuthority authority =
+        new SimpleGrantedAuthority("ROLE_" + admin.getRole()); // Example: ROLE_ADMIN
 
     return new AdminUserDetailsImpl(
-        admin.getId(), admin.getUsername(), admin.getEmail(), admin.getPassword(), authorities);
+        admin.getId(),
+        admin.getUsername(),
+        admin.getEmail(),
+        admin.getPassword(),
+        List.of(authority));
   }
 
   @Override
@@ -49,7 +54,7 @@ public class AdminUserDetailsImpl implements UserDetails {
 
   @Override
   public String getUsername() {
-    return username;
+    return email; // IMPORTANT: use email as username
   }
 
   public Long getId() {
