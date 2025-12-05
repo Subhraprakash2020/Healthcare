@@ -1,21 +1,14 @@
 package com.healthcare.provider.controller;
 
-import com.healthcare.patient.exception.ResourceNotFoundException;
 import com.healthcare.provider.model.Provider;
-import com.healthcare.provider.service.ProviderService;
+import com.healthcare.provider.payload.request.LoginRequestProvider;
+import com.healthcare.provider.repository.ProviderRepository;
+import com.healthcare.provider.service.ProviderServices;
 import com.healthcare.provider.service.SequenceGeneratorService;
-
-import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.List;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,49 +18,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/healthcare")
 public class ProviderController {
 
-  @Autowired ProviderService providerService;
+  private final ProviderServices providerService;
+  @Autowired ProviderRepository providerRepository;
+
+  // FIX: Removed manual instantiation (new ProviderServiceImpl()) and used constructor injection.
+  // Spring will now inject the ProviderServiceImpl bean, which will have its dependencies (like
+  // AuthenticationManager) properly injected.
+  @Autowired
+  public ProviderController(ProviderServices providerService) {
+    this.providerService = providerService;
+  }
 
   @Autowired
   @Qualifier("providerSequenceGeneratorService")
   SequenceGeneratorService sequenceGeneratorService;
 
-  @RequestMapping("/providers")
-  public ResponseEntity<List<Provider>> getProviders() {
-    return new ResponseEntity<>(providerService.getAllProviders() , HttpStatus.OK);
-  }
-
-  @RequestMapping("/providers/{id}")
-  public ResponseEntity<?> getProviderById(@PathVariable Long id) {
-    Provider provider = providerService.getProviderById(id);
-    if (provider != null) {
-      return ResponseEntity.ok(provider);
-    } else {
-      throw new ResourceNotFoundException("Provider not found with id: " + id);
+  // This method work is for provider registration
+  @PostMapping("/providers/SignUp")
+  public ResponseEntity<?> providerRegistration(@RequestBody Provider provider) {
+    if (providerRepository.existsByEmail(provider.getEmail())) {
+      return ResponseEntity.badRequest().body("Error: Email is already in use!");
     }
-  }
-
-  @PostMapping("/provider")
-  public void addProvider(@RequestBody Provider provider) {
     provider.setId(sequenceGeneratorService.generateSequence(Provider.SEQUENCE_NAME));
     providerService.addProvider(provider);
+    return ResponseEntity.ok("Provider registered successfully!");
   }
 
-  public void updateProvider(@RequestBody Provider provider) {
-    // Implementation to update an existing provider
-    providerService.updateProvider(provider);
-  }
-
-  @DeleteMapping("/provider/{id}")
-  public void deleteProvider(@PathVariable Long id) {
-    // Implementation to delete a provider by id
-    providerService.deleteProvider(id);
-  }
-
-
-  @GetMapping("/csrf-token")
-  public CsrfToken getCsrfToken(HttpServletRequest request) {
-    // Implementation to get CSRF token
-
-    return (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+  @PostMapping("/providers/login")
+  public ResponseEntity<?> loginProvider(@Valid @RequestBody LoginRequestProvider loginrequest) {
+    System.out.println("In loginProvider method");
+    // Implementation for provider login
+    return providerService.verify(loginrequest);
   }
 }

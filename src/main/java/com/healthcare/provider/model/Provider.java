@@ -70,9 +70,8 @@ public class Provider {
 
   @Size(min = 12, max = 30, message = "Password must be more than 12 characters long")
   @Pattern(
-    regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12}$",
-    message = "Password must be 12 characters long, contain at least one letter, one number, and one special character"
-  )
+      regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12}$",
+      message =
+          "Password must be 12 characters long, contain at least one letter, one number, and one special character")
   private String passWord;
-
 }
