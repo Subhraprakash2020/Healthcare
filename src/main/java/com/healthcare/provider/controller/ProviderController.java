@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/healthcare")
+@RequestMapping("/healthcare/providers")
 public class ProviderController {
 
   private final ProviderServices providerService;
@@ -34,7 +34,7 @@ public class ProviderController {
   SequenceGeneratorService sequenceGeneratorService;
 
   // This method work is for provider registration
-  @PostMapping("/providers/SignUp")
+  @PostMapping("/SignUp")
   public ResponseEntity<?> providerRegistration(@RequestBody Provider provider) {
     if (providerRepository.existsByEmail(provider.getEmail())) {
       return ResponseEntity.badRequest().body("Error: Email is already in use!");
@@ -44,7 +44,7 @@ public class ProviderController {
     return ResponseEntity.ok("Provider registered successfully!");
   }
 
-  @PostMapping("/providers/login")
+  @PostMapping("/login")
   public ResponseEntity<?> loginProvider(@Valid @RequestBody LoginRequestProvider loginrequest) {
     System.out.println("In loginProvider method");
     // Implementation for provider login
