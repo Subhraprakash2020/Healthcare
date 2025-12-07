@@ -92,33 +92,30 @@ public class AdminController {
   @GetMapping("/patients/{id}")
   public ResponseEntity<?> getPatientById(@PathVariable Long id) {
 
-      Patient patient = adminService.getPatientById(id);
+    Patient patient = adminService.getPatientById(id);
 
-      if (patient == null) {
-          return new ResponseEntity<>(patient, HttpStatus.NOT_FOUND);
-      }
-      else{
-          return new ResponseEntity<>(patient, HttpStatus.OK);
-      }
+    if (patient == null) {
+      return new ResponseEntity<>(patient, HttpStatus.NOT_FOUND);
+    } else {
+      return new ResponseEntity<>(patient, HttpStatus.OK);
+    }
   }
-
 
   @PutMapping("/patientsUpdate/{id}")
-  public ResponseEntity<String> updatePatient(@PathVariable Long id,@RequestBody Patient patientDetails) {
+  public ResponseEntity<String> updatePatient(
+      @PathVariable Long id, @RequestBody Patient patientDetails) {
 
-      try {
-          Patient updatedPatient = adminService.updatePatient(id, patientDetails);
+    try {
+      Patient updatedPatient = adminService.updatePatient(id, patientDetails);
 
-          if (updatedPatient != null) {
-              return ResponseEntity.ok("Patient Details Updated Successfully!");
-          } else {
-              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient Not Found!");
-          }
-
-      } catch (Exception e) {
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                              .body("Cannot Update Patient Details!");
+      if (updatedPatient != null) {
+        return ResponseEntity.ok("Patient Details Updated Successfully!");
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient Not Found!");
       }
-  }
 
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot Update Patient Details!");
+    }
+  }
 }

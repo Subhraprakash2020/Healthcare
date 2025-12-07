@@ -17,68 +17,68 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AdminServiceImpl implements AdminService, UserDetailsService {
 
-    @Autowired
-    private AdminRepository adminRepository;
+  @Autowired private AdminRepository adminRepository;
 
-    @Autowired
-    private PatientService patientService;
+  @Autowired private PatientService patientService;
 
-    @Autowired
-    private PatientRepository patientRepository;
+  @Autowired private PatientRepository patientRepository;
 
-    @Override
-    @Transactional
-    public Admin createAdmin(Admin admin) {
-        return adminRepository.save(admin);
-    }
+  @Override
+  @Transactional
+  public Admin createAdmin(Admin admin) {
+    return adminRepository.save(admin);
+  }
 
-    @Override
-    public List<Admin> getAllAdmins() {
-        return adminRepository.findAll();
-    }
+  @Override
+  public List<Admin> getAllAdmins() {
+    return adminRepository.findAll();
+  }
 
-    @Override
-    public String getEmail() {
-        return null; // Your logic
-    }
+  @Override
+  public String getEmail() {
+    return null; // Your logic
+  }
 
-    // This is the method Spring Security uses
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Admin admin = adminRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Admin Not Found with email: " + email));
+  // This is the method Spring Security uses
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    Admin admin =
+        adminRepository
+            .findByEmail(email)
+            .orElseThrow(
+                () -> new UsernameNotFoundException("Admin Not Found with email: " + email));
 
-        return AdminUserDetailsImpl.build(admin);
-    }
+    return AdminUserDetailsImpl.build(admin);
+  }
 
-    @Override
-    public List<Patient> getListOfPatients() {
-        return patientService.getAllPatients();
-    }
+  @Override
+  public List<Patient> getListOfPatients() {
+    return patientService.getAllPatients();
+  }
 
-    @Override
-    public Patient getPatientById(Long id) {
-        return patientRepository.findById(id).orElse(null);
-    }
+  @Override
+  public Patient getPatientById(Long id) {
+    return patientRepository.findById(id).orElse(null);
+  }
 
-    @Override
-    public Patient updatePatient(Long id, Patient patientDetails) {
-        return patientService.updatePatient(id, patientDetails);
-    }
+  @Override
+  public Patient updatePatient(Long id, Patient patientDetails) {
+    return patientService.updatePatient(id, patientDetails);
+  }
 
-    @Override
-    public UserDetails loadAdminUserByUsername(String username) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'loadAdminUserByUsername'");
-    }
+  @Override
+  public UserDetails loadAdminUserByUsername(String username) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'loadAdminUserByUsername'");
+  }
 
-    // @Override
-    // public Patient deletePatient(Long id) {
-    //     Patient patient = patientRepository.findById(id).orElse(null);
-    //     if (patient != null) {
-    //         patientRepository.delete(patient);
-    //         return patient;
-    //     }
-    //     return null;
-    // }
+  // @Override
+  // public Patient deletePatient(Long id) {
+  //     Patient patient = patientRepository.findById(id).orElse(null);
+  //     if (patient != null) {
+  //         patientRepository.delete(patient);
+  //         return patient;
+  //     }
+  //     return null;
+  // }
 }
