@@ -74,6 +74,6 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
 
   @Override
   public Patient deletePatient(Long id) {
-      return patientService.deletePatient(id);
+    return patientService.deletePatient(id);
   }
 }

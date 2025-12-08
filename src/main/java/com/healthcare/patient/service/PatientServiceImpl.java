@@ -4,7 +4,6 @@ import com.healthcare.patient.model.Patient;
 import com.healthcare.patient.model.Status;
 import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.security.services.UserDetailsImpl;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +89,10 @@ public class PatientServiceImpl implements PatientService, UserDetailsService {
 
   @Override
   public Patient deletePatient(Long id) {
-    Patient patient = patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient Not Found with id: " + id));
+    Patient patient =
+        patientRepository
+            .findById(id)
+            .orElseThrow(() -> new RuntimeException("Patient Not Found with id: " + id));
     patient.setStatus(Status.INACTIVE);
     return patientRepository.save(patient);
   }

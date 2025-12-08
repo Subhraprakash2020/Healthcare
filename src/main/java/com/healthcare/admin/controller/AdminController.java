@@ -123,7 +123,7 @@ public class AdminController {
   @DeleteMapping("/patientsDelete/{id}")
   public ResponseEntity<String> deletePatient(@PathVariable Long id) {
     Patient patient = adminService.getPatientById(id);
-    if(patient != null) {
+    if (patient != null) {
       adminService.deletePatient(id);
       return new ResponseEntity<>("Patient Deleted Successfully!", HttpStatus.OK);
     } else {
