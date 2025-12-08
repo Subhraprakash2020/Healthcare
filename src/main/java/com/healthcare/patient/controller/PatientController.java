@@ -10,9 +10,7 @@ import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.patient.security.services.UserDetailsImpl;
 import com.healthcare.patient.service.SequenceGeneratorService;
 import jakarta.validation.Valid;
-
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
