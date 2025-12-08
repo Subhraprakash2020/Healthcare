@@ -72,13 +72,8 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
     throw new UnsupportedOperationException("Unimplemented method 'loadAdminUserByUsername'");
   }
 
-  // @Override
-  // public Patient deletePatient(Long id) {
-  //     Patient patient = patientRepository.findById(id).orElse(null);
-  //     if (patient != null) {
-  //         patientRepository.delete(patient);
-  //         return patient;
-  //     }
-  //     return null;
-  // }
+  @Override
+  public Patient deletePatient(Long id) {
+      return patientService.deletePatient(id);
+  }
 }

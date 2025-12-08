@@ -13,4 +13,6 @@ public interface PatientService {
   Patient getPatientById(long id);
 
   Patient updatePatient(Long id, Patient patientDetails);
+
+  Patient deletePatient(Long id);
 }

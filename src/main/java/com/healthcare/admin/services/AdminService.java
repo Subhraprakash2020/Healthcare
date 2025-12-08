@@ -20,5 +20,5 @@ public interface AdminService {
 
   Patient getPatientById(Long id);
 
-  // Patient deletePatient(Long id);
+  Patient deletePatient(Long id);
 }

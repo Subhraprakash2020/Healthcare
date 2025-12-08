@@ -3,6 +3,8 @@ package com.healthcare.patient.model;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +16,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 @Getter
 @Setter
@@ -86,4 +89,7 @@ public class Patient implements Persistable<Long> {
   public boolean isNew() {
     return this.createdAt == null;
   }
+
+  @CreatedDate private LocalDateTime updatedAt;
+
 }
