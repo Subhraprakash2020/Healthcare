@@ -34,7 +34,7 @@ public class ProviderController {
   SequenceGeneratorService sequenceGeneratorService;
 
   // This method work is for provider registration
-  @PostMapping("/SignUp")
+  @PostMapping("/signup")
   public ResponseEntity<?> providerRegistration(@RequestBody Provider provider) {
     if (providerRepository.existsByEmail(provider.getEmail())) {
       return ResponseEntity.badRequest().body("Error: Email is already in use!");

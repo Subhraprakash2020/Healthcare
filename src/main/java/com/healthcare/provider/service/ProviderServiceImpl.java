@@ -35,7 +35,6 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
 
     Provider nonNullProvider = Objects.requireNonNull(provider, "Provider cannot be null");
     nonNullProvider.setPassWord(passwordEncoder.encode(nonNullProvider.getPassWord()));
-    System.out.println("Encoded password: " + nonNullProvider.getPassWord());
     providerRepository.save(nonNullProvider);
   }
 
@@ -62,16 +61,13 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
     Object principal = authentication.getPrincipal();
 
     Long id = null;
-    String username = null;
     String emails = null;
 
     if (principal instanceof ProviderPrincipal providerDetails) {
       id = providerDetails.getId();
-      username = providerDetails.getUsername();
       emails = providerDetails.getEmail();
     }
 
-    return ResponseEntity.ok(
-        "JWT: " + jwt + ", ID: " + id + ", Username: " + username + ", Email: " + emails);
+    return ResponseEntity.ok("JWT: " + jwt + ", ID: " + id + ", Email: " + emails);
   }
 }
