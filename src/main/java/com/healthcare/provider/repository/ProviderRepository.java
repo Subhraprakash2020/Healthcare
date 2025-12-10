@@ -12,4 +12,6 @@ public interface ProviderRepository extends MongoRepository<Provider, Long> {
   Boolean existsByEmail(String email);
 
   Boolean existsByPassWord(String passWord);
+
+  Optional<Provider> findById(Long id);
 }

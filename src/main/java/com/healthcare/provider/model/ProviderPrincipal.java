@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class ProviderPrincipal implements UserDetails {
 
   private Long id;
-  private String username;
   private String email;
   private String passWord;
   private Collection<? extends GrantedAuthority> authorities;
@@ -22,7 +21,27 @@ public class ProviderPrincipal implements UserDetails {
       String passWord,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
-    this.username = username;
+    this.email = email;
+    this.passWord = passWord;
+    this.authorities = authorities;
+  }
+
+  // Overloaded constructor to accept String IDs (e.g., provider.getId() returns String)
+  private ProviderPrincipal(
+      String id,
+      String username,
+      String email,
+      String passWord,
+      Collection<? extends GrantedAuthority> authorities) {
+    if (id != null) {
+      try {
+        this.id = Long.parseLong(id);
+      } catch (NumberFormatException e) {
+        this.id = null;
+      }
+    } else {
+      this.id = null;
+    }
     this.email = email;
     this.passWord = passWord;
     this.authorities = authorities;
@@ -34,7 +53,7 @@ public class ProviderPrincipal implements UserDetails {
 
     return new ProviderPrincipal(
         provider.getId(),
-        provider.getUsername(),
+        provider.getUserId(),
         provider.getEmail(),
         provider.getPassWord(),
         authorities);
@@ -52,7 +71,7 @@ public class ProviderPrincipal implements UserDetails {
 
   @Override
   public String getUsername() {
-    return username; // ✅ safe
+    return email; // ✅ safe
   }
 
   public Long getId() {

@@ -36,10 +36,6 @@ public class Provider {
   private String userId;
 
   @Size(max = 100)
-  @NotNull
-  private String username;
-
-  @Size(max = 100)
   @NotBlank
   @Pattern(regexp = "^[A-Za-z\\s'-]+$", message = "First name contains invalid characters")
   private String firstName;
@@ -74,4 +70,6 @@ public class Provider {
       message =
           "Password must be 12 characters long, contain at least one letter, one number, and one special character")
   private String passWord;
+
+  private String role = "PROVIDER";
 }

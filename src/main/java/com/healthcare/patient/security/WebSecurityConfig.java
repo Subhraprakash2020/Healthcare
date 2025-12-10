@@ -70,7 +70,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/healthcare/patient/**")
                     .hasRole("PATIENT")
                     .requestMatchers("/healthcare/providers/**")
-                    .hasRole("Provider")
+                    .hasRole("PROVIDER")
                     .anyRequest()
                     .authenticated());
 
