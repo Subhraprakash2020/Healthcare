@@ -65,6 +65,11 @@ public class WebSecurityConfig {
                         "/healthcare/providers/login",
                         "/healthcare/providers/signup")
                     .permitAll()
+                    .requestMatchers(
+                        "/healthcare/providers/search/**",
+                        "/healthcare/providers/list",
+                        "/healthcare/providers/details/**")
+                    .hasRole("PATIENT")
                     .requestMatchers("/healthcare/admin/**")
                     .hasRole("ADMIN")
                     .requestMatchers("/healthcare/patient/**")
