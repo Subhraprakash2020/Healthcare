@@ -3,6 +3,7 @@ package com.healthcare.patient.model;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -65,6 +66,8 @@ public class Patient implements Persistable<Long> {
 
   private String role;
 
+  private Status status;
+
   @CreatedDate private Date createdAt;
 
   public Patient(String email, String password) {
@@ -82,4 +85,6 @@ public class Patient implements Persistable<Long> {
   public boolean isNew() {
     return this.createdAt == null;
   }
+
+  @CreatedDate private LocalDateTime updatedAt;
 }
