@@ -99,6 +99,7 @@ public class PatientController {
     patient.setEmail(signUpRequest.getEmail());
     patient.setGender(signUpRequest.getGender());
     patient.setRole("PATIENT");
+    patient.setStatus(signUpRequest.getStatus());
     patient.setPassword(encoder.encode(signUpRequest.getPassword()));
 
     patientRepository.save(patient);

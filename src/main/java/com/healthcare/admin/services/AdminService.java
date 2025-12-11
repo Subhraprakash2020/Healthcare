@@ -15,4 +15,10 @@ public interface AdminService {
   public UserDetails loadAdminUserByUsername(String username);
 
   List<Patient> getListOfPatients();
+
+  Patient updatePatient(Long id, Patient patientDetails);
+
+  Patient getPatientById(Long id);
+
+ // Patient deletePatient(Long id);
 }
