@@ -1,6 +1,7 @@
 package com.healthcare.patient.controller;
 
 import com.healthcare.patient.model.Patient;
+import com.healthcare.patient.model.Status;
 import com.healthcare.patient.payload.request.LoginRequest;
 import com.healthcare.patient.payload.request.SignupRequest;
 import com.healthcare.patient.payload.response.JwtResponse;
@@ -100,7 +101,7 @@ public class PatientController {
     patient.setEmail(signUpRequest.getEmail());
     patient.setGender(signUpRequest.getGender());
     patient.setRole("PATIENT");
-    patient.setStatus(signUpRequest.getStatus());
+    patient.setStatus(Status.ACTIVE);
     patient.setPassword(encoder.encode(signUpRequest.getPassword()));
     patient.setUpdatedAt(LocalDateTime.now());
 

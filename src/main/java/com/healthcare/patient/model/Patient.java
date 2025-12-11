@@ -66,8 +66,6 @@ public class Patient implements Persistable<Long> {
 
   private String role;
 
-  @NotNull
-  @Indexed(unique = true)
   private Status status;
 
   @CreatedDate private Date createdAt;
