@@ -6,6 +6,9 @@ import com.healthcare.admin.security.services.AdminUserDetailsImpl;
 import com.healthcare.patient.model.Patient;
 import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.service.PatientService;
+import com.healthcare.provider.model.Provider;
+import com.healthcare.provider.service.ProviderServices;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +25,8 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
   @Autowired private PatientService patientService;
 
   @Autowired private PatientRepository patientRepository;
+
+  @Autowired private ProviderServices providerService;
 
   @Override
   @Transactional
@@ -76,4 +81,26 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
   public Patient deletePatient(Long id) {
     return patientService.deletePatient(id);
   }
+
+  @Override
+  public List<Provider> getListOfProviders() {
+    return providerService.getAllProviders();
+  }
+
+  @Override
+  public Provider getProviderById(Long id) {
+    return providerService.getProviderById(id);
+  }
+
+  @Override
+  public Provider updateProvider(Long id, Provider providerDetails) {
+    return providerService.updateProvider(id, providerDetails);
+  }
+
+  @Override
+  public Provider deleteProvider(Long id) {
+    return providerService.deleteProvider(id);
+  }
+
+  
 }

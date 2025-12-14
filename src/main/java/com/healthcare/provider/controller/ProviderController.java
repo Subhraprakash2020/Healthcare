@@ -40,6 +40,8 @@ public class ProviderController {
       return ResponseEntity.badRequest().body("Error: Email is already in use!");
     }
     provider.setId(sequenceGeneratorService.generateSequence(Provider.SEQUENCE_NAME));
+    String generatedProviderId = String.format("PR%04d", provider.getId());
+    provider.setUserId(generatedProviderId);
     providerService.addProvider(provider);
     return ResponseEntity.ok("Provider registered successfully!");
   }

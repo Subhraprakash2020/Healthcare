@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -63,6 +65,8 @@ public class Provider {
   @Builder.Default private Status status = Status.ACTIVE;
 
   @Builder.Default private LocalDateTime createdAt = LocalDateTime.now();
+
+  @Builder.Default private LocalDateTime updatedAt = LocalDateTime.now();
 
   @Size(min = 12, max = 30, message = "Password must be more than 12 characters long")
   @Pattern(
