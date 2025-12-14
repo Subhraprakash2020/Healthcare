@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProviderSearchController {
   @Autowired ProviderSearchService providerSearchService;
 
-  @PostMapping("/search")
+  @PostMapping("/searchBy")
   public ResponseEntity<?> searchProviders(@RequestBody ProviderSearchRequest request) {
     List<Map<String, Object>> results = providerSearchService.searchProviders(request);
     return ResponseEntity.ok(results);
