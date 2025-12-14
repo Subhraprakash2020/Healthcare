@@ -3,7 +3,6 @@ package com.healthcare.admin.services;
 import com.healthcare.admin.model.Admin;
 import com.healthcare.patient.model.Patient;
 import com.healthcare.provider.model.Provider;
-
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 

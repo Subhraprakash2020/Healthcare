@@ -1,13 +1,11 @@
 package com.healthcare.provider.service;
 
-import com.healthcare.patient.model.Patient;
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.model.ProviderPrincipal;
 import com.healthcare.provider.model.Status;
 import com.healthcare.provider.payload.request.LoginRequestProvider;
 import com.healthcare.provider.repository.ProviderRepository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -90,16 +88,16 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
   public Provider updateProvider(Long id, Provider providerDetails) {
     Provider provider = providerRepository.findById(id).orElse(null);
     if (provider != null) {
-      if(providerDetails.getFirstName() != null){
+      if (providerDetails.getFirstName() != null) {
         provider.setFirstName(providerDetails.getFirstName());
       }
-      if(providerDetails.getLastName() != null){ 
+      if (providerDetails.getLastName() != null) {
         provider.setLastName(providerDetails.getLastName());
       }
-      if(providerDetails.getPhone() != null){
+      if (providerDetails.getPhone() != null) {
         provider.setPhone(providerDetails.getPhone());
       }
-      if(providerDetails.getClinicAddress() != null){
+      if (providerDetails.getClinicAddress() != null) {
         provider.setClinicAddress(providerDetails.getClinicAddress());
       }
       if (providerDetails.getPassWord() != null && !providerDetails.getPassWord().isEmpty()) {
@@ -114,7 +112,10 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
 
   @Override
   public Provider deleteProvider(Long id) {
-    Provider provider = providerRepository.findById(id).orElseThrow(() -> new RuntimeException("Provider not found"));
+    Provider provider =
+        providerRepository
+            .findById(id)
+            .orElseThrow(() -> new RuntimeException("Provider not found"));
     provider.setStatus(Status.INACTIVE);
     return providerRepository.save(provider);
   }

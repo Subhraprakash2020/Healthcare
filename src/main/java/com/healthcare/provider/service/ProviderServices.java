@@ -1,11 +1,8 @@
 package com.healthcare.provider.service;
 
-import com.healthcare.patient.model.Patient;
 import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.payload.request.LoginRequestProvider;
-
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 
 public interface ProviderServices {

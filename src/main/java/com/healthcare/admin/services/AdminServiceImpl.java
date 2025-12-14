@@ -8,7 +8,6 @@ import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.service.PatientService;
 import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.service.ProviderServices;
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -101,6 +100,4 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
   public Provider deleteProvider(Long id) {
     return providerService.deleteProvider(id);
   }
-
-  
 }
