@@ -2,6 +2,7 @@ package com.healthcare.admin.services;
 
 import com.healthcare.admin.model.Admin;
 import com.healthcare.patient.model.Patient;
+import com.healthcare.provider.model.Provider;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,4 +22,12 @@ public interface AdminService {
   Patient getPatientById(Long id);
 
   Patient deletePatient(Long id);
+
+  List<Provider> getListOfProviders();
+
+  Provider getProviderById(Long id);
+
+  Provider updateProvider(Long id, Provider providerDetails);
+
+  Provider deleteProvider(Long id);
 }

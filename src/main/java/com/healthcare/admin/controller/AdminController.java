@@ -9,6 +9,7 @@ import com.healthcare.admin.services.AdminService;
 import com.healthcare.patient.model.Patient;
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.patient.service.SequenceGeneratorService;
+import com.healthcare.provider.model.Provider;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,6 +129,49 @@ public class AdminController {
       return new ResponseEntity<>("Patient Deleted Successfully!", HttpStatus.OK);
     } else {
       return new ResponseEntity<>("Patient Not Found!", HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @GetMapping("/providers")
+  public ResponseEntity<List<Provider>> getListOfProviders() {
+    return new ResponseEntity<>(adminService.getListOfProviders(), HttpStatus.OK);
+  }
+
+  @GetMapping("/providers/{id}")
+  public ResponseEntity<Provider> getProviderById(@PathVariable Long id) {
+    Provider provider = adminService.getProviderById(id);
+    if (provider != null) {
+      return new ResponseEntity<>(provider, HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(provider, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @PutMapping("/providersUpdate/{id}")
+  public ResponseEntity<String> updateProvider(
+      @PathVariable Long id, @RequestBody Provider providerDetails) {
+    try {
+      Provider updatedProvider = adminService.updateProvider(id, providerDetails);
+
+      if (updatedProvider != null) {
+        return ResponseEntity.ok("Provider Details Updated Successfully!");
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provider Not Found!");
+      }
+
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot Update Provider Details!");
+    }
+  }
+
+  @DeleteMapping("/providersDelete/{id}")
+  public ResponseEntity<String> deleteProvider(@PathVariable Long id) {
+    Provider provider = adminService.getProviderById(id);
+    if (provider != null) {
+      adminService.deleteProvider(id);
+      return new ResponseEntity<>("Provider Deleted Successfully!", HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>("Provider Not Found!", HttpStatus.NOT_FOUND);
     }
   }
 }

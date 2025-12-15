@@ -64,6 +64,8 @@ public class Provider {
 
   @Builder.Default private LocalDateTime createdAt = LocalDateTime.now();
 
+  @Builder.Default private LocalDateTime updatedAt = LocalDateTime.now();
+
   @Size(min = 12, max = 30, message = "Password must be more than 12 characters long")
   @Pattern(
       regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12}$",
