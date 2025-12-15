@@ -1,9 +1,6 @@
 package com.healthcare.provider.controller;
 
-import com.healthcare.patient.model.Patient;
-import com.healthcare.patient.model.PatientProfileImage;
 import com.healthcare.provider.model.Provider;
-import com.healthcare.provider.model.ProviderPrincipal;
 import com.healthcare.provider.model.ProviderProfileImage;
 import com.healthcare.provider.repository.ProviderProfileRepository;
 import com.healthcare.provider.repository.ProviderRepository;
