@@ -25,7 +25,11 @@ public class ProviderS3Service {
   public String uploadFile(MultipartFile file, String fileName) throws IOException {
     // Implementation for uploading file to S3
     s3Client.putObject(
-        PutObjectRequest.builder().bucket(bucketName).key(fileName).contentType(file.getContentType()).build(),
+        PutObjectRequest.builder()
+            .bucket(bucketName)
+            .key(fileName)
+            .contentType(file.getContentType())
+            .build(),
         RequestBody.fromBytes(file.getBytes()));
     return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
   }

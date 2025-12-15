@@ -19,37 +19,37 @@ public class ProviderProfileImage {
   private String imageUrl;
   private Date uploadedAt = new Date();
 
-//   public String getproviderId() {
-//     return providerId;
-//   }
+  //   public String getproviderId() {
+  //     return providerId;
+  //   }
 
-//   public void setId(String providerId) {
-//     this.providerId = providerId;
-//   }
+  //   public void setId(String providerId) {
+  //     this.providerId = providerId;
+  //   }
 
-//   public Long getPatientId() {
-//     return patientId;
-//   }
+  //   public Long getPatientId() {
+  //     return patientId;
+  //   }
 
-//   public void setPatientId(Long patientId) {
-//     this.patientId = patientId;
-//   }
+  //   public void setPatientId(Long patientId) {
+  //     this.patientId = patientId;
+  //   }
 
-//   public String getImageUrl() {
-//     return imageUrl;
-//   }
+  //   public String getImageUrl() {
+  //     return imageUrl;
+  //   }
 
-//   public void setImageUrl(String imageUrl) {
-//     this.imageUrl = imageUrl;
-//   }
+  //   public void setImageUrl(String imageUrl) {
+  //     this.imageUrl = imageUrl;
+  //   }
 
-//   public Date getUploadedAt() {
-//     return uploadedAt;
-//   }
+  //   public Date getUploadedAt() {
+  //     return uploadedAt;
+  //   }
 
-//   public void setUploadedAt(Date uploadedAt) {
-//     this.uploadedAt = uploadedAt;
-//   }
+  //   public void setUploadedAt(Date uploadedAt) {
+  //     this.uploadedAt = uploadedAt;
+  //   }
   // public ProviderProfileImage(String id, Long patientId, String imageUrl, Date uploadedAt) {
   // 	super();
   // 	this.id = id;

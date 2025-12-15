@@ -62,7 +62,6 @@ public class ProviderImageUploadingController {
     }
   }
 
-
   @GetMapping("/profile")
   @PreAuthorize("hasRole('PROVIDER')")
   public ResponseEntity<?> getProfile(Principal principal) {
@@ -73,7 +72,8 @@ public class ProviderImageUploadingController {
             .findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-    ProviderProfileImage profile = profileRepository.findByProviderId(provider.getUserId()).orElse(null);
+    ProviderProfileImage profile =
+        profileRepository.findByProviderId(provider.getUserId()).orElse(null);
 
     return ResponseEntity.ok(
         Map.of(
