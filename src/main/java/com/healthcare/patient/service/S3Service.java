@@ -2,6 +2,7 @@ package com.healthcare.patient.service;
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +16,9 @@ public class S3Service {
   @Value("${aws.s3.bucketName}")
   private String healthcarePatientProfileImagesBucket;
 
-  @Autowired private S3Client s3Client;
+  @Autowired
+  @Qualifier("patientS3Client")
+  private S3Client s3Client;
 
   public String uploadPatientImage(MultipartFile file, String fileName) throws IOException {
     PutObjectRequest request =
