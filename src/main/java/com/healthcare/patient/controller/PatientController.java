@@ -73,14 +73,18 @@ public class PatientController {
     Long id = null;
     String username = principal.getUsername();
     String email = null;
+    String firstName = null;
+    String lastName = null;
 
     // Extract patient-specific fields only if principal is a Patient user
     if (principal instanceof UserDetailsImpl patientDetails) {
       id = patientDetails.getId();
       email = patientDetails.getEmail();
+      firstName = patientDetails.getFirstName();
+      lastName = patientDetails.getLastName();
     }
 
-    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email));
+    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName));
   }
 
   @PostMapping("/signup")
