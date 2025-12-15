@@ -2,6 +2,8 @@ package com.healthcare.patient.security;
 
 import com.healthcare.patient.security.jwt.AuthEntryPointJwt;
 import com.healthcare.patient.security.jwt.AuthTokenFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableMethodSecurity
@@ -49,9 +54,28 @@ public class WebSecurityConfig {
   }
 
   @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of("http://localhost:3000"));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    config.setAllowedHeaders(List.of("*"));
+    config.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
+  }
+
+  protected boolean shouldNotFilter(HttpServletRequest request) {
+    return request.getMethod().equals("OPTIONS")
+        || request.getRequestURI().startsWith("/healthcare/provider/options");
+  }
+
+  @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    http.csrf(csrf -> csrf.disable())
+    http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(csrf -> csrf.disable())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -63,8 +87,14 @@ public class WebSecurityConfig {
                         "/healthcare/admin/signin",
                         "/healthcare/admin/signup",
                         "/healthcare/providers/login",
-                        "/healthcare/providers/signup")
+                        "/healthcare/providers/signup",
+                        "/healthcare/provider/options/**")
                     .permitAll()
+                    .requestMatchers(
+                        "/healthcare/providers/search/**",
+                        "/healthcare/providers/list",
+                        "/healthcare/providers/details/**")
+                    .hasRole("PATIENT")
                     .requestMatchers("/healthcare/admin/**")
                     .hasRole("ADMIN")
                     .requestMatchers("/healthcare/patient/**")
