@@ -2,7 +2,6 @@ package com.healthcare.provider.service;
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +15,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 public class ProviderS3Service {
 
   @Autowired
-  @Qualifier("providerS3Client")
+  // @Qualifier("providerS3Client")
   private S3Client s3Client;
 
   @Value("${aws.s3.bucketName}")

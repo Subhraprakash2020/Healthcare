@@ -30,7 +30,7 @@ public class ProviderImageUploadingController {
   @PostMapping("/uploadProviderImage")
   @PreAuthorize("hasRole('PROVIDER')")
   public ResponseEntity<Map<String, String>> uploadProviderImage(
-      @RequestParam("file") MultipartFile file, Principal principal) throws IOException {
+      @RequestParam("image") MultipartFile image, Principal principal) throws IOException {
 
     try {
       String email = principal.getName();
@@ -41,8 +41,8 @@ public class ProviderImageUploadingController {
               .orElseThrow(() -> new RuntimeException("Provider not found"));
 
       String fileName =
-          "provider-profile/" + provider.getUserId() + "_" + file.getOriginalFilename();
-      String imageUrl = s3Service.uploadFile(file, fileName);
+          "provider-profile/" + provider.getUserId() + "_" + image.getOriginalFilename();
+      String imageUrl = s3Service.uploadFile(image, fileName);
 
       ProviderProfileImage profile =
           profileRepository
