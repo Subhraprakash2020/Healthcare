@@ -40,16 +40,13 @@ public class ProviderImageUploadingController {
               .findByEmail(email)
               .orElseThrow(() -> new RuntimeException("Provider not found"));
 
-      String fileName =
-          "provider-profile/" + provider.getUserId() + "_" + image.getOriginalFilename();
+      String fileName = "provider-profile/" + provider.getId() + "_" + image.getOriginalFilename();
       String imageUrl = s3Service.uploadFile(image, fileName);
 
       ProviderProfileImage profile =
-          profileRepository
-              .findByProviderId(provider.getUserId())
-              .orElse(new ProviderProfileImage());
+          profileRepository.findByProviderId(provider.getId()).orElse(new ProviderProfileImage());
 
-      profile.setProviderId(provider.getUserId());
+      profile.setProviderId(provider.getId());
       profile.setImageUrl(imageUrl);
 
       profileRepository.save(profile);
@@ -73,11 +70,11 @@ public class ProviderImageUploadingController {
             .orElseThrow(() -> new RuntimeException("Patient not found"));
 
     ProviderProfileImage profile =
-        profileRepository.findByProviderId(provider.getUserId()).orElse(null);
+        profileRepository.findByProviderId(provider.getId()).orElse(null);
 
     return ResponseEntity.ok(
         Map.of(
-            "providerId", provider.getUserId(),
+            "providerId", provider.getId(),
             "email", provider.getEmail(),
             "firstName", provider.getFirstName(),
             "lastName", provider.getLastName(),

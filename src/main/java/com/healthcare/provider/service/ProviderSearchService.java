@@ -3,9 +3,11 @@ package com.healthcare.provider.service;
 import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.model.ProviderAddress;
 import com.healthcare.provider.model.ProviderDetails;
+import com.healthcare.provider.model.ProviderProfileImage;
 import com.healthcare.provider.model.ProviderSearchRequest;
 import com.healthcare.provider.repository.ProviderAddressRepository;
 import com.healthcare.provider.repository.ProviderDetailsRepository;
+import com.healthcare.provider.repository.ProviderProfileRepository;
 import com.healthcare.provider.repository.ProviderRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,8 @@ public class ProviderSearchService {
   @Autowired private ProviderAddressRepository providerAddressRepository;
 
   @Autowired private ProviderRepository providerRepository;
+
+  @Autowired private ProviderProfileRepository providerProfileRepository;
 
   public List<Map<String, Object>> searchProviders(ProviderSearchRequest request) {
     List<ProviderDetails> detailsList;
@@ -76,11 +80,16 @@ public class ProviderSearchService {
           providerAddressRepository.findByProviderId(details.getProviderId()).stream()
               .findFirst()
               .orElse(null);
+      ProviderProfileImage profileImage =
+          providerProfileRepository
+              .findByProviderId(Long.valueOf(details.getProviderId()))
+              .orElse(null);
 
       Map<String, Object> map = new HashMap<>();
       map.put("provider", provider);
       map.put("details", details);
       map.put("address", address);
+      map.put("profileImage", profileImage);
 
       response.add(map);
     }

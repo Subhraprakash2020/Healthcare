@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "provider_profile_images")
 public class ProviderProfileImage {
   @Id private String id;
-  private String providerId;
+  private Long providerId;
   private String imageUrl;
   private Date uploadedAt = new Date();
 }
