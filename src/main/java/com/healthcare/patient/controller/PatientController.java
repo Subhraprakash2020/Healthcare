@@ -112,9 +112,9 @@ public class PatientController {
     patientRepository.save(patient);
 
     Authentication authentication =
-      authenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(
-              signUpRequest.getEmail(), signUpRequest.getPassword()));
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                signUpRequest.getEmail(), signUpRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -135,7 +135,6 @@ public class PatientController {
       lastName = patientDetails.getLastName();
     }
 
-    return ResponseEntity.ok(
-        new JwtResponse(jwt, id, username, email, firstName, lastName));
-    }
+    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName));
+  }
 }
