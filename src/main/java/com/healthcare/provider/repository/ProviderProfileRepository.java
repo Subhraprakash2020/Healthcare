@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProviderProfileRepository extends MongoRepository<ProviderProfileImage, String> {
+public interface ProviderProfileRepository extends MongoRepository<ProviderProfileImage, Long> {
 
-  Optional<ProviderProfileImage> findByProviderId(String providerId);
+  Optional<ProviderProfileImage> findByProviderId(Long providerId);
 }

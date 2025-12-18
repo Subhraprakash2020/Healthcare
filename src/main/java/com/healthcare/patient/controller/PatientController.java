@@ -111,6 +111,30 @@ public class PatientController {
 
     patientRepository.save(patient);
 
-    return ResponseEntity.ok(new MessageResponse("Patient registered successfully!"));
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                signUpRequest.getEmail(), signUpRequest.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    String jwt = jwtUtils.generateJwtToken(authentication);
+
+    UserDetails principal = (UserDetails) authentication.getPrincipal();
+
+    Long id = null;
+    String username = principal.getUsername();
+    String email = null;
+    String firstName = null;
+    String lastName = null;
+
+    if (principal instanceof UserDetailsImpl patientDetails) {
+      id = patientDetails.getId();
+      email = patientDetails.getEmail();
+      firstName = patientDetails.getFirstName();
+      lastName = patientDetails.getLastName();
+    }
+
+    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName));
   }
 }
