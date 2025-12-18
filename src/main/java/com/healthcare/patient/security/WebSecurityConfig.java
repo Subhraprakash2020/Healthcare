@@ -91,15 +91,13 @@ public class WebSecurityConfig {
                         "/healthcare/provider/options/**")
                     .permitAll()
                     .requestMatchers(
-                        "/healthcare/providers/search/**",
-                        "/healthcare/providers/list",
-                        "/healthcare/providers/details/**")
+                        "/healthcare/providers/search/**", "/healthcare/providers/list")
                     .hasRole("PATIENT")
                     .requestMatchers("/healthcare/admin/**")
                     .hasRole("ADMIN")
                     .requestMatchers("/healthcare/patient/**")
                     .hasRole("PATIENT")
-                    .requestMatchers("/healthcare/providers/**")
+                    .requestMatchers("/healthcare/providers/**", "/healthcare/providers/details/**")
                     .hasRole("PROVIDER")
                     .anyRequest()
                     .authenticated());
