@@ -2,7 +2,6 @@ package com.healthcare.provider.controller;
 
 import com.healthcare.provider.payload.request.ProviderDetailsRequest;
 import com.healthcare.provider.service.ProviderDetailsService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("healthcare/providers/details")
 public class ProviderDetailsController {
 
-    @Autowired
-    private ProviderDetailsService providerDetailsService;
+  @Autowired private ProviderDetailsService providerDetailsService;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addDetails(@RequestBody ProviderDetailsRequest request) {
-        return providerDetailsService.addProviderDetails(request);
-    }
+  @PostMapping("/add")
+  public ResponseEntity<?> addDetails(@RequestBody ProviderDetailsRequest request) {
+    return providerDetailsService.addProviderDetails(request);
+  }
 
-    @GetMapping("/{providerId}")
-    public ResponseEntity<?> getProviderDetails(@PathVariable Long providerId) {
-        return providerDetailsService.getProviderDetailsByProviderId(providerId);
-    }
+  @GetMapping("/{providerId}")
+  public ResponseEntity<?> getProviderDetails(@PathVariable Long providerId) {
+    return providerDetailsService.getProviderDetailsByProviderId(providerId);
+  }
 }
