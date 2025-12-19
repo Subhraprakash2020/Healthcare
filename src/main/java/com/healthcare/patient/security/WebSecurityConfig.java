@@ -95,7 +95,7 @@ public class WebSecurityConfig {
                     .hasRole("PATIENT")
                     .requestMatchers("/healthcare/admin/**")
                     .hasRole("ADMIN")
-                    .requestMatchers("/healthcare/patient/**")
+                    .requestMatchers("/healthcare/patient/**", "/healthcare/providers/details/**")
                     .hasRole("PATIENT")
                     .requestMatchers("/healthcare/providers/**", "/healthcare/providers/details/**")
                     .hasRole("PROVIDER")
