@@ -77,6 +77,7 @@ public class ProviderDetailsServiceImpl implements ProviderDetailsService {
 
   @Override
   public ResponseEntity<?> getProviderDetailsByProviderId(Long providerId) {
+    Optional<Provider> provider = providerRepository.findById(providerId);
 
     List<ProviderDetails> detailsList = providerDetailsRepository.findByProviderId(providerId);
 
@@ -96,6 +97,7 @@ public class ProviderDetailsServiceImpl implements ProviderDetailsService {
         providerProfileRepository.findByProviderId(providerId);
 
     Map<String, Object> response = new HashMap<>();
+    response.put("provider", provider);
     response.put("providerDetails", details);
     response.put("providerAddress", address);
     response.put("providerProfileImage", profileImage.orElse(null));
