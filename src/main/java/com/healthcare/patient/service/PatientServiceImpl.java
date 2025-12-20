@@ -96,4 +96,36 @@ public class PatientServiceImpl implements PatientService, UserDetailsService {
     patient.setStatus(Status.INACTIVE);
     return patientRepository.save(patient);
   }
+
+  @Override
+  public Patient updatePatientDetails(String email, Patient patientDetails) {
+
+    Patient patient =
+        patientRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Patient Not Found with email: " + email));
+
+    if (patientDetails.getFirstName() != null) {
+      patient.setFirstName(patientDetails.getFirstName());
+    }
+    if (patientDetails.getLastName() != null) {
+      patient.setLastName(patientDetails.getLastName());
+    }
+    if (patientDetails.getPhoneNumber() != null) {
+      patient.setPhoneNumber(patientDetails.getPhoneNumber());
+    }
+    if (patientDetails.getAddress() != null) {
+      patient.setAddress(patientDetails.getAddress());
+    }
+    if (patientDetails.getAge() != null) {
+      patient.setAge(patientDetails.getAge());
+    }
+    if (patientDetails.getPassword() != null && !patientDetails.getPassword().isEmpty()) {
+      patient.setPassword(encoder.encode(patientDetails.getPassword()));
+    }
+
+    patient.setUpdatedAt(LocalDateTime.now());
+
+    return patientRepository.save(patient);
+  }
 }

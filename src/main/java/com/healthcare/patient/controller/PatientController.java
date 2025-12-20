@@ -9,11 +9,13 @@ import com.healthcare.patient.payload.response.MessageResponse;
 import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.patient.security.services.UserDetailsImpl;
+import com.healthcare.patient.service.PatientService;
 import com.healthcare.patient.service.SequenceGeneratorService;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -136,5 +139,23 @@ public class PatientController {
     }
 
     return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName));
+  }
+
+  @Autowired PatientService patientService;
+
+  @PutMapping("/updateDetails")
+  public ResponseEntity<String> updatePatient(
+      @RequestBody Patient patientDetails, Authentication authentication) {
+
+    String email = authentication.getName();
+
+    Patient updatePatient = patientService.updatePatientDetails(email, patientDetails);
+
+    if (updatePatient != null) {
+      return ResponseEntity.ok("Patient details updated successfully!");
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("Error: Unable to update patient details.");
+    }
   }
 }

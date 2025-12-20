@@ -15,4 +15,6 @@ public interface PatientService {
   Patient updatePatient(Long id, Patient patientDetails);
 
   Patient deletePatient(Long id);
+
+  Patient updatePatientDetails(String email, Patient patientDetails);
 }
