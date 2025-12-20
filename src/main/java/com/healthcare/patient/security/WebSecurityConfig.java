@@ -88,7 +88,8 @@ public class WebSecurityConfig {
                         "/healthcare/admin/signup",
                         "/healthcare/providers/login",
                         "/healthcare/providers/signup",
-                        "/healthcare/provider/options/**")
+                        "/healthcare/provider/options/**",
+                        "/healthcare/providers/details/**")
                     .permitAll()
                     .requestMatchers(
                         "/healthcare/providers/search/**", "/healthcare/providers/list")
@@ -97,7 +98,7 @@ public class WebSecurityConfig {
                     .hasRole("ADMIN")
                     .requestMatchers("/healthcare/patient/**")
                     .hasRole("PATIENT")
-                    .requestMatchers("/healthcare/providers/**", "/healthcare/providers/details/**")
+                    .requestMatchers("/healthcare/providers/**")
                     .hasRole("PROVIDER")
                     .anyRequest()
                     .authenticated());
