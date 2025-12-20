@@ -1,7 +1,10 @@
 package com.healthcare.patient.service;
 
 import com.healthcare.patient.model.Patient;
+import com.healthcare.patient.model.PatientProfileImage;
 import com.healthcare.patient.model.Status;
+import com.healthcare.patient.payload.response.PatientProfileResponse;
+import com.healthcare.patient.repository.PatientProfileRepository;
 import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.security.services.UserDetailsImpl;
 import java.time.LocalDateTime;
@@ -20,6 +23,8 @@ public class PatientServiceImpl implements PatientService, UserDetailsService {
   @Autowired private PatientRepository patientRepository;
 
   @Autowired PasswordEncoder encoder;
+
+  @Autowired PatientProfileRepository patientProfileRepository;
 
   @Override
   public Patient createPatient(Patient patient) {
@@ -127,5 +132,13 @@ public class PatientServiceImpl implements PatientService, UserDetailsService {
     patient.setUpdatedAt(LocalDateTime.now());
 
     return patientRepository.save(patient);
+  }
+
+  @Override
+  public PatientProfileResponse getPatientProfileResponse(Long patientId) {
+    Patient patient = getPatientById(patientId);
+    PatientProfileImage profileImage =
+        patientProfileRepository.findByPatientId(patientId).orElse(null);
+    return new PatientProfileResponse(patient, profileImage);
   }
 }
