@@ -24,7 +24,7 @@ public class PatientServiceImpl implements PatientService, UserDetailsService {
 
   @Autowired PasswordEncoder encoder;
 
-  @Autowired PatientProfileRepository patientProfileRepository;
+  @Autowired PatientProfileRepository patientProfileImageRepository;
 
   @Override
   public Patient createPatient(Patient patient) {
@@ -135,10 +135,13 @@ public class PatientServiceImpl implements PatientService, UserDetailsService {
   }
 
   @Override
-  public PatientProfileResponse getPatientProfileResponse(Long patientId) {
-    Patient patient = getPatientById(patientId);
-    PatientProfileImage profileImage =
-        patientProfileRepository.findByPatientId(patientId).orElse(null);
-    return new PatientProfileResponse(patient, profileImage);
+  public PatientProfileResponse getPatientProfileResponse(Long id) {
+
+    Patient patient =
+        patientRepository.findById(id).orElseThrow(() -> new RuntimeException("Patient not found"));
+
+    PatientProfileImage image = patientProfileImageRepository.findByPatientId(id).orElse(null);
+
+    return new PatientProfileResponse(patient, image);
   }
 }

@@ -6,6 +6,7 @@ import com.healthcare.patient.payload.request.LoginRequest;
 import com.healthcare.patient.payload.request.SignupRequest;
 import com.healthcare.patient.payload.response.JwtResponse;
 import com.healthcare.patient.payload.response.MessageResponse;
+import com.healthcare.patient.payload.response.PatientProfileResponse;
 import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.patient.security.services.UserDetailsImpl;
@@ -161,7 +162,7 @@ public class PatientController {
   }
 
   @GetMapping("profile/{id}")
-  public ResponseEntity<?> getPatientProfileResponse(@PathVariable Long id) {
+  public ResponseEntity<PatientProfileResponse> getPatientProfileResponse(@PathVariable Long id) {
     return ResponseEntity.ok(patientService.getPatientProfileResponse(id));
   }
 }
