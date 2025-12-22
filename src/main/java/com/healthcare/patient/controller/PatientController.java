@@ -6,6 +6,7 @@ import com.healthcare.patient.payload.request.LoginRequest;
 import com.healthcare.patient.payload.request.SignupRequest;
 import com.healthcare.patient.payload.response.JwtResponse;
 import com.healthcare.patient.payload.response.MessageResponse;
+import com.healthcare.patient.payload.response.PatientProfileResponse;
 import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.patient.security.services.UserDetailsImpl;
@@ -25,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +46,8 @@ public class PatientController {
   @Autowired PasswordEncoder encoder;
 
   @Autowired JwtUtils jwtUtils;
+
+  @Autowired PatientService patientService;
 
   // Patient Controller
   @PostMapping("/patient")
@@ -141,8 +145,6 @@ public class PatientController {
     return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName));
   }
 
-  @Autowired PatientService patientService;
-
   @PutMapping("/updateDetails")
   public ResponseEntity<String> updatePatient(
       @RequestBody Patient patientDetails, Authentication authentication) {
@@ -157,5 +159,10 @@ public class PatientController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
           .body("Error: Unable to update patient details.");
     }
+  }
+
+  @GetMapping("profile/{id}")
+  public ResponseEntity<PatientProfileResponse> getPatientProfileResponse(@PathVariable Long id) {
+    return ResponseEntity.ok(patientService.getPatientProfileResponse(id));
   }
 }

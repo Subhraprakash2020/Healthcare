@@ -1,6 +1,7 @@
 package com.healthcare.patient.service;
 
 import com.healthcare.patient.model.Patient;
+import com.healthcare.patient.payload.response.PatientProfileResponse;
 import java.util.List;
 
 public interface PatientService {
@@ -17,4 +18,6 @@ public interface PatientService {
   Patient deletePatient(Long id);
 
   Patient updatePatientDetails(String email, Patient patientDetails);
+
+  PatientProfileResponse getPatientProfileResponse(Long patientId);
 }
