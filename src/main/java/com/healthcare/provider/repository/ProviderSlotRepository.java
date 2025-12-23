@@ -7,4 +7,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ProviderSlotRepository extends MongoRepository<ProvidersSlot, String> {
   List<ProvidersSlot> findByProviderIdAndDateOrderByStartTime(Long providerId, LocalDate date);
+
+  boolean existsByProviderId(Long providerId);
+
+  boolean existsByProviderIdAndDate(Long providerId, LocalDate date);
+
+  boolean existsByAvailabilityId(String availavilityId);
 }

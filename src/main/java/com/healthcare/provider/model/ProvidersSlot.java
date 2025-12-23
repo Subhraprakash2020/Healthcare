@@ -22,6 +22,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ProvidersSlot {
   @Id private String id;
   private long providerId;
+  private String availabilityId;
   private LocalDate date;
   private LocalTime startTime;
   private LocalTime endTime;

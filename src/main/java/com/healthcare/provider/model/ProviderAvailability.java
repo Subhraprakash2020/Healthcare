@@ -1,5 +1,6 @@
 package com.healthcare.provider.model;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ProviderAvailability {
   @Id private String id;
   private Long providerId;
+  private LocalDate date;
   private LocalTime startTime;
   private LocalTime endTime;
   private int slotDuration;
