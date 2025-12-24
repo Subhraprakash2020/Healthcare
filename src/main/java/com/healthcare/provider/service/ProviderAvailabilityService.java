@@ -1,6 +1,7 @@
 package com.healthcare.provider.service;
 
 import com.healthcare.provider.model.ProviderAvailability;
+import java.util.List;
 
 public interface ProviderAvailabilityService {
 
@@ -9,4 +10,6 @@ public interface ProviderAvailabilityService {
   void updateAvailability(String availabilityId, ProviderAvailability request, String email);
 
   void deleteAvailability(String availabilityId, String email);
+
+  List<ProviderAvailability> getAvailability(String email, String availabilityId);
 }

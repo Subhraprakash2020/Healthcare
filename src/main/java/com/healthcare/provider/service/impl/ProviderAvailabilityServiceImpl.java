@@ -125,4 +125,24 @@ public class ProviderAvailabilityServiceImpl implements ProviderAvailabilityServ
 
     providerAvailabilityRepository.delete(availability);
   }
+
+  @Override
+  public List<ProviderAvailability> getAvailability(String email, String availabilityId) {
+    Provider provider =
+        providerRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Provider not found"));
+
+    Long providerId = provider.getId();
+
+    if (availabilityId != null && !availabilityId.isEmpty()) {
+      ProviderAvailability availability =
+          providerAvailabilityRepository
+              .findByIdAndProviderId(availabilityId, providerId)
+              .orElseThrow(() -> new RuntimeException("Availability not found"));
+      return List.of(availability);
+    } else {
+      return providerAvailabilityRepository.findByProviderId(providerId);
+    }
+  }
 }

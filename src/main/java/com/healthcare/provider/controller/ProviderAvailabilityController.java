@@ -6,6 +6,7 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,5 +49,16 @@ public class ProviderAvailabilityController {
     availabilityService.deleteAvailability(availabilityId, email);
 
     return ResponseEntity.ok("Availability deleted successfully");
+  }
+
+  @GetMapping("/{availabilityId}")
+  public ResponseEntity<?> getAvailability(
+      @PathVariable String availabilityId, Principal principal) {
+    String email = principal.getName();
+    ProviderAvailability availability =
+        availabilityService.getAvailability(email, availabilityId).stream()
+            .findFirst()
+            .orElse(null);
+    return ResponseEntity.ok(availability);
   }
 }

@@ -69,4 +69,55 @@ public class ProviderSlotGenerateImpl implements ProviderSlotGenerateService {
 
     providerSlotRepository.saveAll(slots);
   }
+
+  @Override
+  public void deleteSlotsByAvailabilityId(String slotAvailabilityId, String email) {
+    Provider provider =
+        providerRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Provider not found"));
+
+    Long providerId = provider.getId();
+
+    ProvidersSlot slot =
+        providerSlotRepository
+            .findByIdAndProviderId(slotAvailabilityId, providerId)
+            .orElseThrow(() -> new RuntimeException("Slot not found"));
+
+    providerSlotRepository.delete(slot);
+  }
+
+  @Override
+  public List<ProvidersSlot> getSlotsByAvailabilityId(String slotAvailabilityId, String email) {
+    Provider provider =
+        providerRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Provider not found"));
+    long providerId = provider.getId();
+    return providerSlotRepository.findByAvailabilityId(slotAvailabilityId).stream()
+        .filter(slot -> slot.getProviderId() == providerId)
+        .toList();
+  }
+
+  @Override
+  public void updateSlotBySlotId(String slotId, String email, ProvidersSlot request) {
+    Provider provider =
+        providerRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Provider not found"));
+
+    Long providerId = provider.getId();
+
+    ProvidersSlot existingSlot =
+        providerSlotRepository
+            .findByIdAndProviderId(slotId, providerId)
+            .orElseThrow(() -> new RuntimeException("Slot not found"));
+
+    existingSlot.setStartTime(request.getStartTime());
+    existingSlot.setEndTime(request.getEndTime());
+    existingSlot.setMaxCapacity(request.getMaxCapacity());
+    existingSlot.setStatus(request.getStatus());
+
+    providerSlotRepository.save(existingSlot);
+  }
 }
