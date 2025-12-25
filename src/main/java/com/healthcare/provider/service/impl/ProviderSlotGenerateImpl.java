@@ -8,6 +8,7 @@ import com.healthcare.provider.repository.ProviderAvailabilityRepository;
 import com.healthcare.provider.repository.ProviderRepository;
 import com.healthcare.provider.repository.ProviderSlotRepository;
 import com.healthcare.provider.service.ProviderSlotGenerateService;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,5 +120,27 @@ public class ProviderSlotGenerateImpl implements ProviderSlotGenerateService {
     existingSlot.setStatus(request.getStatus());
 
     providerSlotRepository.save(existingSlot);
+  }
+
+  @Override
+  public List<ProvidersSlot> getSlotsForPatient(String availabilityId, LocalDate date) {
+    LocalDate today = LocalDate.now();
+    LocalTime now = LocalTime.now();
+
+    // ❌ Past date → no slots
+    if (date.isBefore(today)) {
+      return List.of();
+    }
+
+    List<ProvidersSlot> slots =
+        providerSlotRepository.findByAvailabilityIdAndDateOrderByStartTime(availabilityId, date);
+
+    // ✅ Future date → return all (AVAILABLE + FULL)
+    if (date.isAfter(today)) {
+      return slots;
+    }
+
+    // ✅ Today → return only future time slots
+    return slots.stream().filter(slot -> slot.getStartTime().isAfter(now)).toList();
   }
 }
