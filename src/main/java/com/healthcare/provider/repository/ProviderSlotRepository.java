@@ -1,6 +1,7 @@
 package com.healthcare.provider.repository;
 
 import com.healthcare.provider.model.ProvidersSlot;
+import com.healthcare.provider.model.SlotStatus;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,6 @@ public interface ProviderSlotRepository extends MongoRepository<ProvidersSlot, S
   Optional<ProvidersSlot> findByIdAndProviderId(String id, Long providerId);
 
   List<ProvidersSlot> findByAvailabilityId(String availabilityId);
+
+  Optional<ProvidersSlot> findByIdAndStatus(String id, SlotStatus status);
 }
