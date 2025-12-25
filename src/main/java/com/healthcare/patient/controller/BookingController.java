@@ -43,10 +43,12 @@ public class BookingController {
     return bookingService.getMyBookings(principal.getName());
   }
 
-  @GetMapping("/{availabilityId}")
+  @GetMapping("/slot/{availabilityId}")
   public List<ProvidersSlot> getSlotsForPatient(
+      @RequestParam Long providerId,
       @PathVariable String availabilityId,
-      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-    return slotService.getSlotsForPatient(availabilityId, date);
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+          LocalDate date) {
+    return slotService.getSlotsForPatient(providerId, availabilityId, date);
   }
 }
