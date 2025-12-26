@@ -2,7 +2,9 @@ package com.healthcare.patient.controller;
 
 import com.healthcare.patient.model.Booking;
 import com.healthcare.patient.service.BookingService;
+import com.healthcare.provider.model.ProviderAvailability;
 import com.healthcare.provider.model.ProvidersSlot;
+import com.healthcare.provider.service.ProviderAvailabilityService;
 import com.healthcare.provider.service.ProviderSlotGenerateService;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ public class BookingController {
 
   @Autowired private BookingService bookingService;
   @Autowired private ProviderSlotGenerateService slotService;
+  @Autowired private ProviderAvailabilityService availabilityService;
 
   @PostMapping("/{slotId}")
   public ResponseEntity<?> bookSlot(@PathVariable String slotId, Principal principal) {
@@ -51,4 +54,14 @@ public class BookingController {
           LocalDate date) {
     return slotService.getSlotsForPatient(providerId, availabilityId, date);
   }
+
+  @GetMapping("/availability/{providerId}")
+    public List<ProviderAvailability> getAllSlotsForProvider(
+        @PathVariable Long providerId,
+        @RequestParam(required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        LocalDate date
+    ) {
+        return availabilityService.getAllAvailabilities(providerId, date);
+    }
 }
