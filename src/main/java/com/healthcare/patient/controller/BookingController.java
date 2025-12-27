@@ -56,12 +56,10 @@ public class BookingController {
   }
 
   @GetMapping("/availability/{providerId}")
-    public List<ProviderAvailability> getAllSlotsForProvider(
-        @PathVariable Long providerId,
-        @RequestParam(required = false)
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        LocalDate date
-    ) {
-        return availabilityService.getAllAvailabilities(providerId, date);
-    }
+  public List<ProviderAvailability> getAllSlotsForProvider(
+      @PathVariable Long providerId,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+          LocalDate date) {
+    return availabilityService.getAllAvailabilities(providerId, date);
+  }
 }

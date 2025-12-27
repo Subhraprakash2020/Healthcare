@@ -1,7 +1,6 @@
 package com.healthcare.provider.service;
 
 import com.healthcare.provider.model.ProviderAvailability;
-
 import java.time.LocalDate;
 import java.util.List;
 

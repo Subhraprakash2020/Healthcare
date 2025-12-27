@@ -6,7 +6,6 @@ import com.healthcare.provider.repository.ProviderAvailabilityRepository;
 import com.healthcare.provider.repository.ProviderRepository;
 import com.healthcare.provider.repository.ProviderSlotRepository;
 import com.healthcare.provider.service.ProviderAvailabilityService;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -150,34 +149,32 @@ public class ProviderAvailabilityServiceImpl implements ProviderAvailabilityServ
   }
 
   @Override
-    public List<ProviderAvailability> getAllAvailabilities(Long providerId, LocalDate date) {
-        LocalDate today = LocalDate.now();
+  public List<ProviderAvailability> getAllAvailabilities(Long providerId, LocalDate date) {
+    LocalDate today = LocalDate.now();
     LocalDate startDate = (date != null) ? date : today;
     LocalTime nowTime = LocalTime.now();
 
     for (int i = 0; i < 7; i++) {
 
-        LocalDate checkDate = startDate.plusDays(i);
+      LocalDate checkDate = startDate.plusDays(i);
 
-        List<ProviderAvailability> availabilities =
-            providerAvailabilityRepository
-                .findByProviderIdAndDateOrderByStartTime(providerId, checkDate);
+      List<ProviderAvailability> availabilities =
+          providerAvailabilityRepository.findByProviderIdAndDateOrderByStartTime(
+              providerId, checkDate);
 
-        if (availabilities.isEmpty()) {
-            continue;
-        }
+      if (availabilities.isEmpty()) {
+        continue;
+      }
 
-        if (checkDate.equals(today)) {
-            availabilities.removeIf(
-                avail -> !avail.getEndTime().isAfter(nowTime)
-            );
-        }
+      if (checkDate.equals(today)) {
+        availabilities.removeIf(avail -> !avail.getEndTime().isAfter(nowTime));
+      }
 
-        if (!availabilities.isEmpty()) {
-            return availabilities;
-        }
+      if (!availabilities.isEmpty()) {
+        return availabilities;
+      }
     }
 
     return List.of();
-    }
+  }
 }
