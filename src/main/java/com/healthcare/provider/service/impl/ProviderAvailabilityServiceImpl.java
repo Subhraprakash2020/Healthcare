@@ -6,6 +6,8 @@ import com.healthcare.provider.repository.ProviderAvailabilityRepository;
 import com.healthcare.provider.repository.ProviderRepository;
 import com.healthcare.provider.repository.ProviderSlotRepository;
 import com.healthcare.provider.service.ProviderAvailabilityService;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -144,5 +146,35 @@ public class ProviderAvailabilityServiceImpl implements ProviderAvailabilityServ
     } else {
       return providerAvailabilityRepository.findByProviderId(providerId);
     }
+  }
+
+  @Override
+  public List<ProviderAvailability> getAllAvailabilities(Long providerId, LocalDate date) {
+    LocalDate today = LocalDate.now();
+    LocalDate startDate = (date != null) ? date : today;
+    LocalTime nowTime = LocalTime.now();
+
+    for (int i = 0; i < 7; i++) {
+
+      LocalDate checkDate = startDate.plusDays(i);
+
+      List<ProviderAvailability> availabilities =
+          providerAvailabilityRepository.findByProviderIdAndDateOrderByStartTime(
+              providerId, checkDate);
+
+      if (availabilities.isEmpty()) {
+        continue;
+      }
+
+      if (checkDate.equals(today)) {
+        availabilities.removeIf(avail -> !avail.getEndTime().isAfter(nowTime));
+      }
+
+      if (!availabilities.isEmpty()) {
+        return availabilities;
+      }
+    }
+
+    return List.of();
   }
 }

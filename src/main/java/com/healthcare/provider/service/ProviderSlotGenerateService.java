@@ -15,5 +15,5 @@ public interface ProviderSlotGenerateService {
 
   List<ProvidersSlot> getSlotsByAvailabilityId(String slotAvailabilityId, String email);
 
-  List<ProvidersSlot> getSlotsForPatient(String availabilityId, LocalDate date);
+  List<ProvidersSlot> getSlotsForPatient(Long providerId, String availabilityId, LocalDate date);
 }

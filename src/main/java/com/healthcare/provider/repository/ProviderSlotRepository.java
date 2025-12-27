@@ -24,6 +24,6 @@ public interface ProviderSlotRepository extends MongoRepository<ProvidersSlot, S
 
   Optional<ProvidersSlot> findByIdAndStatus(String id, SlotStatus status);
 
-  List<ProvidersSlot> findByAvailabilityIdAndDateOrderByStartTime(
-      String availabilityId, LocalDate date);
+  List<ProvidersSlot> findByProviderIdAndAvailabilityIdAndDateOrderByStartTime(
+      Long providerId, String availabilityId, LocalDate date);
 }

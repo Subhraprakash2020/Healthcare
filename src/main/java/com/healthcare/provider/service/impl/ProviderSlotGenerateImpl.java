@@ -123,24 +123,51 @@ public class ProviderSlotGenerateImpl implements ProviderSlotGenerateService {
   }
 
   @Override
-  public List<ProvidersSlot> getSlotsForPatient(String availabilityId, LocalDate date) {
+  public List<ProvidersSlot> getSlotsForPatient(
+      Long providerId, String availabilityId, LocalDate date) {
     LocalDate today = LocalDate.now();
     LocalTime now = LocalTime.now();
 
-    // ❌ Past date → no slots
-    if (date.isBefore(today)) {
-      return List.of();
+    if (date == null) {
+      date = today;
     }
 
-    List<ProvidersSlot> slots =
-        providerSlotRepository.findByAvailabilityIdAndDateOrderByStartTime(availabilityId, date);
+    for (int i = 0; i < 30; i++) {
+      LocalDate searchDate = date.plusDays(i);
 
-    // ✅ Future date → return all (AVAILABLE + FULL)
-    if (date.isAfter(today)) {
-      return slots;
+      List<ProvidersSlot> slots =
+          providerSlotRepository.findByProviderIdAndAvailabilityIdAndDateOrderByStartTime(
+              providerId, availabilityId, searchDate);
+
+      if (slots.isEmpty()) {
+        continue; // try next day
+      }
+
+      // 🟢 If today → filter past time slots
+      if (searchDate.equals(today)) {
+        slots = slots.stream().filter(slot -> slot.getStartTime().isAfter(now)).toList();
+      }
+
+      if (!slots.isEmpty()) {
+        return slots; // 👈 FIRST future slots found
+      }
     }
+
+    // // ❌ Past date → no slots
+    // if (date.isBefore(today)) {
+    //   return List.of();
+    // }
+
+    // List<ProvidersSlot> slots =
+    //
+    // providerSlotRepository.findByProviderIdAndAvailabilityIdAndDateOrderByStartTime(providerId,availabilityId, date);
+
+    // // ✅ Future date → return all (AVAILABLE + FULL)
+    // if (date.isAfter(today)) {
+    //   return slots;
+    // }
 
     // ✅ Today → return only future time slots
-    return slots.stream().filter(slot -> slot.getStartTime().isAfter(now)).toList();
+    return List.of();
   }
 }

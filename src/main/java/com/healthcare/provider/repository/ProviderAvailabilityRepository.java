@@ -15,4 +15,7 @@ public interface ProviderAvailabilityRepository
   Optional<ProviderAvailability> findByIdAndProviderId(String id, Long providerId);
 
   List<ProviderAvailability> findByProviderIdAndDate(Long providerId, LocalDate date);
+
+  List<ProviderAvailability> findByProviderIdAndDateOrderByStartTime(
+      Long providerId, LocalDate date);
 }
