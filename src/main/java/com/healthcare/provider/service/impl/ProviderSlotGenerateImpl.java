@@ -25,40 +25,48 @@ public class ProviderSlotGenerateImpl implements ProviderSlotGenerateService {
 
   @Override
   public void generateSlotsFromAvailability(String availabilityId, String email) {
+
     Provider provider =
         providerRepository
             .findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Provider not found"));
 
-    Long providerId = provider.getId();
-
     ProviderAvailability availability =
         providerAvailabilityRepository
-            .findByIdAndProviderId(availabilityId, providerId)
+            .findByIdAndProviderId(availabilityId, provider.getId())
             .orElseThrow(() -> new RuntimeException("Availability not found"));
 
     if (providerSlotRepository.existsByAvailabilityId(availabilityId)) {
       throw new RuntimeException("Slots already generated for this availability");
     }
 
-    LocalTime slotStart = availability.getStartTime();
-    LocalTime availabilityEnd = availability.getEndTime();
-
     int slotDuration = availability.getSlotDuration();
     int capacity = availability.getCapacityPerSlot();
 
+    if (slotDuration <= 0) {
+      throw new IllegalArgumentException("Slot duration must be > 0");
+    }
+
+    LocalTime slotStart = availability.getStartTime();
+    LocalTime availabilityEnd = availability.getEndTime();
+
+    if (slotStart.isAfter(availabilityEnd)) {
+      throw new IllegalArgumentException("Invalid availability time range");
+    }
+
+    final int MAX_SLOTS_PER_DAY = 50;
+
     List<ProvidersSlot> slots = new ArrayList<>();
 
-    while (slotStart.plusMinutes(slotDuration).compareTo(availabilityEnd) <= 0) {
+    while (!slotStart.plusMinutes(slotDuration).isAfter(availabilityEnd)
+        && slots.size() < MAX_SLOTS_PER_DAY) {
 
       ProvidersSlot slot = new ProvidersSlot();
-      slot.setProviderId(providerId);
+      slot.setProviderId(provider.getId());
       slot.setAvailabilityId(availability.getId());
       slot.setDate(availability.getDate());
-
       slot.setStartTime(slotStart);
       slot.setEndTime(slotStart.plusMinutes(slotDuration));
-
       slot.setMaxCapacity(capacity);
       slot.setBookedCount(0);
       slot.setStatus(SlotStatus.AVAILABLE);
@@ -125,49 +133,24 @@ public class ProviderSlotGenerateImpl implements ProviderSlotGenerateService {
   @Override
   public List<ProvidersSlot> getSlotsForPatient(
       Long providerId, String availabilityId, LocalDate date) {
+
     LocalDate today = LocalDate.now();
     LocalTime now = LocalTime.now();
 
-    if (date == null) {
+    boolean isDateProvided = (date != null);
+
+    if (!isDateProvided) {
       date = today;
     }
 
-    for (int i = 0; i < 30; i++) {
-      LocalDate searchDate = date.plusDays(i);
+    List<ProvidersSlot> slots =
+        providerSlotRepository.findByProviderIdAndAvailabilityIdAndDateOrderByStartTime(
+            providerId, availabilityId, date);
 
-      List<ProvidersSlot> slots =
-          providerSlotRepository.findByProviderIdAndAvailabilityIdAndDateOrderByStartTime(
-              providerId, availabilityId, searchDate);
-
-      if (slots.isEmpty()) {
-        continue; // try next day
-      }
-
-      // 🟢 If today → filter past time slots
-      if (searchDate.equals(today)) {
-        slots = slots.stream().filter(slot -> slot.getStartTime().isAfter(now)).toList();
-      }
-
-      if (!slots.isEmpty()) {
-        return slots; // 👈 FIRST future slots found
-      }
+    if (date.equals(today)) {
+      slots = slots.stream().filter(slot -> slot.getStartTime().isAfter(now)).toList();
     }
 
-    // // ❌ Past date → no slots
-    // if (date.isBefore(today)) {
-    //   return List.of();
-    // }
-
-    // List<ProvidersSlot> slots =
-    //
-    // providerSlotRepository.findByProviderIdAndAvailabilityIdAndDateOrderByStartTime(providerId,availabilityId, date);
-
-    // // ✅ Future date → return all (AVAILABLE + FULL)
-    // if (date.isAfter(today)) {
-    //   return slots;
-    // }
-
-    // ✅ Today → return only future time slots
-    return List.of();
+    return slots;
   }
 }
