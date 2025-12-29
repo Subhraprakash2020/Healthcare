@@ -15,6 +15,8 @@ import com.healthcare.patient.service.SequenceGeneratorService;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,17 +73,31 @@ public class PatientController {
                 loginRequest.getEmail(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
+    
 
     String jwt = jwtUtils.generateJwtToken(authentication);
 
-    // Use common interface, not direct casting!
     UserDetails principal = (UserDetails) authentication.getPrincipal();
+
+    if (!(principal instanceof UserDetailsImpl userDetails)) {
+      return ResponseEntity
+          .status(HttpStatus.UNAUTHORIZED)
+          .body(Map.of("message", "Invalid user"));
+    }
+
+    if (!"PATIENT".equals(userDetails.getRole())) {
+        return ResponseEntity
+            .status(HttpStatus.FORBIDDEN)
+            .body(Map.of("message", "Access denied: Patient login only"));
+    }
+
 
     Long id = null;
     String username = principal.getUsername();
     String email = null;
     String firstName = null;
     String lastName = null;
+    String role = null;
 
     // Extract patient-specific fields only if principal is a Patient user
     if (principal instanceof UserDetailsImpl patientDetails) {
@@ -89,9 +105,10 @@ public class PatientController {
       email = patientDetails.getEmail();
       firstName = patientDetails.getFirstName();
       lastName = patientDetails.getLastName();
+      role = patientDetails.getRole();  
     }
 
-    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName));
+    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName, role));
   }
 
   @PostMapping("/signup")
@@ -134,15 +151,17 @@ public class PatientController {
     String email = null;
     String firstName = null;
     String lastName = null;
+    String role = null;
 
     if (principal instanceof UserDetailsImpl patientDetails) {
       id = patientDetails.getId();
       email = patientDetails.getEmail();
       firstName = patientDetails.getFirstName();
       lastName = patientDetails.getLastName();
+      role = patientDetails.getRole();
     }
 
-    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName));
+    return ResponseEntity.ok(new JwtResponse(jwt, id, username, email, firstName, lastName, role));
   }
 
   @PutMapping("/updateDetails")

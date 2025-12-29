@@ -51,7 +51,6 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
   }
 
   public ResponseEntity<?> verify(LoginRequestProvider loginRequest) {
-    Provider provider = providerRepository.findByEmail(loginRequest.getEmail()).orElse(null);
     Authentication authentication =
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(

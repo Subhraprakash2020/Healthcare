@@ -12,6 +12,7 @@ public class ProviderPrincipal implements UserDetails {
   private Long id;
   private String email;
   private String passWord;
+  private String role;
   private Collection<? extends GrantedAuthority> authorities;
 
   private ProviderPrincipal(
@@ -19,6 +20,7 @@ public class ProviderPrincipal implements UserDetails {
       String username,
       String email,
       String passWord,
+      String role,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.email = email;
@@ -32,6 +34,7 @@ public class ProviderPrincipal implements UserDetails {
       String username,
       String email,
       String passWord,
+      String role,
       Collection<? extends GrantedAuthority> authorities) {
     if (id != null) {
       try {
@@ -43,6 +46,7 @@ public class ProviderPrincipal implements UserDetails {
       this.id = null;
     }
     this.email = email;
+    this.role = role;
     this.passWord = passWord;
     this.authorities = authorities;
   }
@@ -55,6 +59,7 @@ public class ProviderPrincipal implements UserDetails {
         provider.getId(),
         provider.getUserId(),
         provider.getEmail(),
+        provider.getRole(),
         provider.getPassWord(),
         authorities);
   }
@@ -80,6 +85,10 @@ public class ProviderPrincipal implements UserDetails {
 
   public String getEmail() {
     return email;
+  }
+
+  public String getRole() {
+    return role;
   }
 
   @Override
