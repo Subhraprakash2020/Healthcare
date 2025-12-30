@@ -8,12 +8,15 @@ import com.healthcare.provider.payload.request.LoginRequestProvider;
 import com.healthcare.provider.repository.ProviderRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -51,26 +54,40 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
   }
 
   public ResponseEntity<?> verify(LoginRequestProvider loginRequest) {
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(), loginRequest.getPassWord()));
+
+    Authentication authentication;
+
+    try {
+      authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  loginRequest.getEmail(), loginRequest.getPassWord()));
+    } catch (AuthenticationException ex) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid provider credentials");
+    }
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    String jwt = jwtUtils.generateJwtToken(authentication);
-
     Object principal = authentication.getPrincipal();
 
-    Long id = null;
-    String emails = null;
-
-    if (principal instanceof ProviderPrincipal providerDetails) {
-      id = providerDetails.getId();
-      emails = providerDetails.getEmail();
+    if (!(principal instanceof ProviderPrincipal providerPrincipal)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+          .body("Access denied: Not a provider account");
     }
 
-    return ResponseEntity.ok("JWT: " + jwt + ", ID: " + id + ", Email: " + emails);
+    if (!"PROVIDER".equals(providerPrincipal.getRole())) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+          .body("Access denied: Provider role required");
+    }
+
+    String jwt = jwtUtils.generateJwtToken(authentication);
+
+    return ResponseEntity.ok(
+        Map.of(
+            "token", jwt,
+            "id", providerPrincipal.getId(),
+            "email", providerPrincipal.getEmail(),
+            "role", providerPrincipal.getRole()));
   }
 
   @Override

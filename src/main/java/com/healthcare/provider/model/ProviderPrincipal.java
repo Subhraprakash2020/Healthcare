@@ -25,6 +25,7 @@ public class ProviderPrincipal implements UserDetails {
     this.id = id;
     this.email = email;
     this.passWord = passWord;
+    this.role = role;
     this.authorities = authorities;
   }
 
@@ -46,8 +47,8 @@ public class ProviderPrincipal implements UserDetails {
       this.id = null;
     }
     this.email = email;
-    this.role = role;
     this.passWord = passWord;
+    this.role = role;
     this.authorities = authorities;
   }
 
@@ -59,8 +60,8 @@ public class ProviderPrincipal implements UserDetails {
         provider.getId(),
         provider.getUserId(),
         provider.getEmail(),
-        provider.getRole(),
         provider.getPassWord(),
+        provider.getRole(),
         authorities);
   }
 
