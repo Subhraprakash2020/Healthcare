@@ -89,7 +89,8 @@ public class WebSecurityConfig {
                         "/healthcare/providers/login",
                         "/healthcare/providers/signup",
                         "/healthcare/provider/options/**",
-                        "/healthcare/providers/details/**")
+                        "/healthcare/providers/details/**",
+                        "/actuator/**")
                     .permitAll()
                     .requestMatchers(
                         "/healthcare/providers/search/**", "/healthcare/providers/list")
