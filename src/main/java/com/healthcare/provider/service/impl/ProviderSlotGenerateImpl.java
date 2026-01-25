@@ -153,4 +153,20 @@ public class ProviderSlotGenerateImpl implements ProviderSlotGenerateService {
 
     return slots;
   }
+
+  @Override
+  public List<ProvidersSlot> getSlotForProvider(Long providerId, LocalDate date) {
+    LocalDate today = LocalDate.now();
+    LocalTime now = LocalTime.now();
+    boolean isDateProvided = (date != null);
+    if (!isDateProvided) {
+      date = today;
+    }
+    List<ProvidersSlot> slots =
+        providerSlotRepository.findByProviderIdAndDateOrderByStartTime(providerId, date);
+    if (date.equals(today)) {
+      slots = slots.stream().filter(slot -> slot.getStartTime().isAfter(now)).toList();
+    }
+    return slots;
+  }
 }
