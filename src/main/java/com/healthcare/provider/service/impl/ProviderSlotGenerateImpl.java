@@ -75,7 +75,8 @@ public class ProviderSlotGenerateImpl implements ProviderSlotGenerateService {
 
       slotStart = slotStart.plusMinutes(slotDuration);
     }
-
+    availability.setSlotGeneratedStatus(true);
+    providerAvailabilityRepository.save(availability);
     providerSlotRepository.saveAll(slots);
   }
 

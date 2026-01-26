@@ -3,7 +3,6 @@ package com.healthcare.provider.controller;
 import com.healthcare.provider.service.ProviderSlotGenerateService;
 import java.security.Principal;
 import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,10 +38,9 @@ public class ProviderSlotController {
 
   @GetMapping("/{providerId}/date/{date}")
   public ResponseEntity<?> getSlotsForProvider(
-      @PathVariable Long providerId, @PathVariable String date  , Principal principal) {
+      @PathVariable Long providerId, @PathVariable String date, Principal principal) {
     return ResponseEntity.ok(slotService.getSlotForProvider(providerId, LocalDate.parse(date)));
   }
-
 
   //   @PutMapping("/update/{slotId}")
   //   public ResponseEntity<?> updateSlot(
