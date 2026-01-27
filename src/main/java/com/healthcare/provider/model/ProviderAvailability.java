@@ -22,4 +22,5 @@ public class ProviderAvailability {
   private LocalTime endTime;
   private int slotDuration;
   private int capacityPerSlot;
+  private Boolean slotGeneratedStatus = false;
 }

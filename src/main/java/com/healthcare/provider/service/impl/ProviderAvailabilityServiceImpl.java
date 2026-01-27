@@ -8,6 +8,7 @@ import com.healthcare.provider.repository.ProviderSlotRepository;
 import com.healthcare.provider.service.ProviderAvailabilityService;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -153,8 +154,8 @@ public class ProviderAvailabilityServiceImpl implements ProviderAvailabilityServ
     LocalDate today = LocalDate.now();
     LocalDate startDate = (date != null) ? date : today;
     LocalTime nowTime = LocalTime.now();
-
-    for (int i = 0; i < 7; i++) {
+    List<ProviderAvailability> result = new ArrayList<>();
+    for (int i = 0; i < 30; i++) {
 
       LocalDate checkDate = startDate.plusDays(i);
 
@@ -170,11 +171,12 @@ public class ProviderAvailabilityServiceImpl implements ProviderAvailabilityServ
         availabilities.removeIf(avail -> !avail.getEndTime().isAfter(nowTime));
       }
 
-      if (!availabilities.isEmpty()) {
-        return availabilities;
-      }
+      // if (!availabilities.isEmpty()) {
+      //   return availabilities;
+      // }
+      result.addAll(availabilities);
     }
 
-    return List.of();
+    return result;
   }
 }
