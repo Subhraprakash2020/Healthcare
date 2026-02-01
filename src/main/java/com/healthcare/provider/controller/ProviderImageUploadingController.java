@@ -7,6 +7,7 @@ import com.healthcare.provider.repository.ProviderRepository;
 import com.healthcare.provider.service.ProviderS3Service;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -69,15 +70,20 @@ public class ProviderImageUploadingController {
             .findByEmail(email)
             .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-    ProviderProfileImage profile =
+    ProviderProfileImage profileImage =
         profileRepository.findByProviderId(provider.getId()).orElse(null);
 
-    return ResponseEntity.ok(
-        Map.of(
-            "providerId", provider.getId(),
-            "email", provider.getEmail(),
-            "firstName", provider.getFirstName(),
-            "lastName", provider.getLastName(),
-            "imageUrl", profile != null ? profile.getImageUrl() : null));
+    Map<String, Object> response = new HashMap<>();
+
+    // ✅ ALWAYS return provider details
+    response.put("providerId", provider.getId());
+    response.put("email", provider.getEmail());
+    response.put("firstName", provider.getFirstName());
+    response.put("lastName", provider.getLastName());
+
+    // ✅ Image only if exists
+    response.put("imageUrl", profileImage != null ? profileImage.getImageUrl() : null);
+
+    return ResponseEntity.ok(response);
   }
 }

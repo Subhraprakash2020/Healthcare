@@ -6,6 +6,7 @@ import com.healthcare.patient.repository.PatientProfileRepository;
 import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.service.S3Service;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -73,12 +74,14 @@ public class PatientProfileImageController {
 
     PatientProfileImage profile = profileRepository.findByPatientId(patient.getId()).orElse(null);
 
-    return ResponseEntity.ok(
-        Map.of(
-            "patientId", patient.getId(),
-            "email", patient.getEmail(),
-            "firstName", patient.getFirstName(),
-            "lastName", patient.getLastName(),
-            "imageUrl", profile != null ? profile.getImageUrl() : null));
+    Map<String, Object> response = new HashMap<>();
+
+    response.put("patientId", patient.getId());
+    response.put("email", patient.getEmail());
+    response.put("firstName", patient.getFirstName());
+    response.put("lastName", patient.getLastName());
+
+    response.put("imageUrl", profile != null ? profile.getImageUrl() : null);
+    return ResponseEntity.ok(response);
   }
 }
