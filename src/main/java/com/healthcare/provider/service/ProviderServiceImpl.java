@@ -113,8 +113,10 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
             .findByEmail(principal.getName())
             .orElseThrow(() -> new UsernameNotFoundException("Provider not found"));
 
-    List<ProviderDetails> detailsList = providerDetailsRepository.findByProviderId(provider.getId());
-    List<ProviderAddress> addressList = providerAddressRepository.findByProviderId(provider.getId());
+    List<ProviderDetails> detailsList =
+        providerDetailsRepository.findByProviderId(provider.getId());
+    List<ProviderAddress> addressList =
+        providerAddressRepository.findByProviderId(provider.getId());
     Optional<ProviderProfileImage> profileImage =
         providerProfileRepository.findByProviderId(provider.getId());
 

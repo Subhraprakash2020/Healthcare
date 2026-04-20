@@ -2,9 +2,9 @@ package com.healthcare.provider.service;
 
 import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.payload.request.LoginRequestProvider;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import java.security.Principal;
 
 public interface ProviderServices {
   public void addProvider(Provider provider);
