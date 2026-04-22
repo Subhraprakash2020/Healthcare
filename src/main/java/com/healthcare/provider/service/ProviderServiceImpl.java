@@ -2,14 +2,23 @@ package com.healthcare.provider.service;
 
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.provider.model.Provider;
+import com.healthcare.provider.model.ProviderAddress;
+import com.healthcare.provider.model.ProviderDetails;
 import com.healthcare.provider.model.ProviderPrincipal;
+import com.healthcare.provider.model.ProviderProfileImage;
 import com.healthcare.provider.model.Status;
 import com.healthcare.provider.payload.request.LoginRequestProvider;
+import com.healthcare.provider.repository.ProviderAddressRepository;
+import com.healthcare.provider.repository.ProviderDetailsRepository;
+import com.healthcare.provider.repository.ProviderProfileRepository;
 import com.healthcare.provider.repository.ProviderRepository;
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +37,9 @@ import org.springframework.stereotype.Service;
 public class ProviderServiceImpl implements ProviderServices, UserDetailsService {
 
   @Autowired ProviderRepository providerRepository;
+  @Autowired private ProviderDetailsRepository providerDetailsRepository;
+  @Autowired private ProviderAddressRepository providerAddressRepository;
+  @Autowired private ProviderProfileRepository providerProfileRepository;
   @Autowired private AuthenticationManager authenticationManager;
 
   @Autowired
@@ -88,6 +100,47 @@ public class ProviderServiceImpl implements ProviderServices, UserDetailsService
             "id", providerPrincipal.getId(),
             "email", providerPrincipal.getEmail(),
             "role", providerPrincipal.getRole()));
+  }
+
+  @Override
+  public ResponseEntity<?> getLoggedInProviderDetails(Principal principal) {
+    if (principal == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Provider is not authenticated");
+    }
+
+    Provider provider =
+        providerRepository
+            .findByEmail(principal.getName())
+            .orElseThrow(() -> new UsernameNotFoundException("Provider not found"));
+
+    List<ProviderDetails> detailsList =
+        providerDetailsRepository.findByProviderId(provider.getId());
+    List<ProviderAddress> addressList =
+        providerAddressRepository.findByProviderId(provider.getId());
+    Optional<ProviderProfileImage> profileImage =
+        providerProfileRepository.findByProviderId(provider.getId());
+
+    Map<String, Object> providerResponse = new HashMap<>();
+    providerResponse.put("id", provider.getId());
+    providerResponse.put("userId", provider.getUserId());
+    providerResponse.put("firstName", provider.getFirstName());
+    providerResponse.put("lastName", provider.getLastName());
+    providerResponse.put("email", provider.getEmail());
+    providerResponse.put("phone", provider.getPhone());
+    providerResponse.put("clinicAddress", provider.getClinicAddress());
+    providerResponse.put("gender", provider.getGender());
+    providerResponse.put("status", provider.getStatus());
+    providerResponse.put("createdAt", provider.getCreatedAt());
+    providerResponse.put("updatedAt", provider.getUpdatedAt());
+    providerResponse.put("role", provider.getRole());
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("provider", providerResponse);
+    response.put("providerDetails", detailsList.isEmpty() ? null : detailsList.get(0));
+    response.put("providerAddress", addressList.isEmpty() ? null : addressList.get(0));
+    response.put("providerProfileImage", profileImage.orElse(null));
+
+    return ResponseEntity.ok(response);
   }
 
   @Override

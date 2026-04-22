@@ -6,9 +6,11 @@ import com.healthcare.provider.repository.ProviderRepository;
 import com.healthcare.provider.service.ProviderServices;
 import com.healthcare.provider.service.SequenceGeneratorService;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,5 +53,10 @@ public class ProviderController {
     System.out.println("In loginProvider method");
     // Implementation for provider login
     return providerService.verify(loginrequest);
+  }
+
+  @GetMapping("/me")
+  public ResponseEntity<?> getLoggedInProviderDetails(Principal principal) {
+    return providerService.getLoggedInProviderDetails(principal);
   }
 }

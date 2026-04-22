@@ -2,6 +2,7 @@ package com.healthcare.provider.service;
 
 import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.payload.request.LoginRequestProvider;
+import java.security.Principal;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
@@ -9,6 +10,8 @@ public interface ProviderServices {
   public void addProvider(Provider provider);
 
   public ResponseEntity<?> verify(LoginRequestProvider loginRequest);
+
+  public ResponseEntity<?> getLoggedInProviderDetails(Principal principal);
 
   public List<Provider> getAllProviders();
 
