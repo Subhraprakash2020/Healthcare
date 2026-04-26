@@ -1,8 +1,6 @@
 package com.healthcare.provider.service;
-
-import com.healthcare.patient.model.Patient;
-import java.util.Optional;
-
-public interface PatientBookingDetailsService {
-  Optional<Patient> findById(Long id);
+import java.time.LocalDate;
+import java.util.Map;
+public interface PatientBookingDetailsService{
+  Map<String, Object> getBookedPatientCountForProvider(String providerEmail, LocalDate date);
 }
