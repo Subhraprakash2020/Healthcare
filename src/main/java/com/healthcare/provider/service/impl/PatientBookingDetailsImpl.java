@@ -5,7 +5,6 @@ import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.repository.PatientBookingDetailsRepository;
 import com.healthcare.provider.repository.ProviderRepository;
 import com.healthcare.provider.service.PatientBookingDetailsService;
-
 import java.time.LocalDate;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,18 @@ public class PatientBookingDetailsImpl implements PatientBookingDetailsService {
   @Autowired private PatientBookingDetailsRepository patientBookingDetailsRepository;
 
   @Override
-  public Map<String, Object> getBookedPatientCountForProvider(String providerEmail, LocalDate date){
-    Provider provider = providerRepository.findByEmail(providerEmail).orElseThrow(() -> new RuntimeException("Provider not found"));
+  public Map<String, Object> getBookedPatientCountForProvider(
+      String providerEmail, LocalDate date) {
+    Provider provider =
+        providerRepository
+            .findByEmail(providerEmail)
+            .orElseThrow(() -> new RuntimeException("Provider not found"));
 
-    long bookedPatientCount = patientBookingDetailsRepository.countByProviderIdAndBookingDateAndStatus(provider.getId(), date, BookingStatus.CONFIRMED);
+    long bookedPatientCount =
+        patientBookingDetailsRepository.countByProviderIdAndBookingDateAndStatus(
+            provider.getId(), date, BookingStatus.CONFIRMED);
 
-    return Map.of("Provider Id",provider.getId(), "date", date, "BookedPatientCount", bookedPatientCount);
+    return Map.of(
+        "Provider Id", provider.getId(), "date", date, "BookedPatientCount", bookedPatientCount);
   }
 }

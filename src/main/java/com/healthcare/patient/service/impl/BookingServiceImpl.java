@@ -7,14 +7,9 @@ import com.healthcare.patient.repository.PatientRepository;
 import com.healthcare.patient.service.BookingService;
 import com.healthcare.patient.service.SequenceGeneratorService;
 import com.healthcare.provider.model.BookingStatus;
-import com.healthcare.provider.model.Provider;
 import com.healthcare.provider.model.ProvidersSlot;
 import com.healthcare.provider.model.SlotStatus;
-import com.healthcare.provider.repository.ProviderRepository;
-import com.healthcare.provider.repository.ProviderSlotRepository;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -30,10 +25,6 @@ public class BookingServiceImpl implements BookingService {
   @Autowired private MongoTemplate mongoTemplate;
 
   @Autowired private BookingRepository bookingRepository;
-
-  @Autowired private ProviderSlotRepository slotRepository;
-
-  @Autowired private ProviderRepository providerRepository;
 
   @Autowired private PatientRepository patientRepository;
 
@@ -127,23 +118,5 @@ public class BookingServiceImpl implements BookingService {
             .orElseThrow(() -> new RuntimeException("Patient not found"));
 
     return bookingRepository.findByPatientId(patient.getId());
-  }
-
-  @Override
-  public Map<String, Object> getTodayBookedPatientCountForProvider(String providerEmail) {
-    Provider provider =
-        providerRepository
-            .findByEmail(providerEmail)
-            .orElseThrow(() -> new RuntimeException("Provider not found"));
-
-    LocalDate date = LocalDate.now();
-    long bookedPatientCount =
-        bookingRepository.countByProviderIdAndBookingDateAndStatus(
-            provider.getId(), date, BookingStatus.CONFIRMED);
-
-    return Map.of(
-        "providerId", provider.getId(),
-        "date", date,
-        "bookedPatientCount", bookedPatientCount);
   }
 }
