@@ -9,7 +9,6 @@ import com.healthcare.patient.service.SequenceGeneratorService;
 import com.healthcare.provider.model.BookingStatus;
 import com.healthcare.provider.model.ProvidersSlot;
 import com.healthcare.provider.model.SlotStatus;
-import com.healthcare.provider.repository.ProviderSlotRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -26,8 +25,6 @@ public class BookingServiceImpl implements BookingService {
   @Autowired private MongoTemplate mongoTemplate;
 
   @Autowired private BookingRepository bookingRepository;
-
-  @Autowired private ProviderSlotRepository slotRepository;
 
   @Autowired private PatientRepository patientRepository;
 
