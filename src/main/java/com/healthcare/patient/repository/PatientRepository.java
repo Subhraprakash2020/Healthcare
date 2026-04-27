@@ -10,4 +10,6 @@ public interface PatientRepository extends MongoRepository<Patient, Long> {
   Boolean existsByEmail(String email);
 
   Boolean existsByPassword(String password);
+
+  Optional<Patient> findById(Long id);
 }

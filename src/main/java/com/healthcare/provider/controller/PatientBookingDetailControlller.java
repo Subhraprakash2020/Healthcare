@@ -23,4 +23,11 @@ public class PatientBookingDetailControlller {
         patientBookingDetailsService.getBookedPatientCountForProvider(
             principal.getName(), bookingDate));
   }
+
+  @GetMapping("/patients")
+  public ResponseEntity<?> getBookedPatients(Principal principal, @RequestParam LocalDate date) {
+
+    return ResponseEntity.ok(
+        patientBookingDetailsService.getBookedPatientDetailsForProvider(principal.getName(), date));
+  }
 }
