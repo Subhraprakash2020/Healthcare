@@ -8,7 +8,6 @@ import com.healthcare.admin.response.AdminJWTResponse;
 import com.healthcare.admin.security.services.AdminUserDetailsImpl;
 import com.healthcare.admin.services.AdminService;
 import com.healthcare.patient.model.Patient;
-import com.healthcare.patient.payload.response.JwtResponse;
 import com.healthcare.patient.security.jwt.JwtUtils;
 import com.healthcare.patient.service.SequenceGeneratorService;
 import com.healthcare.provider.model.Provider;
