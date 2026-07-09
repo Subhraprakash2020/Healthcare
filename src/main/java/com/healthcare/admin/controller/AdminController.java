@@ -4,6 +4,7 @@ import com.healthcare.admin.model.Admin;
 import com.healthcare.admin.payload.LoginRequestAdmin;
 import com.healthcare.admin.payload.SignUpRequestAdmin;
 import com.healthcare.admin.repository.AdminRepository;
+import com.healthcare.admin.response.AdminJWTResponse;
 import com.healthcare.admin.security.services.AdminUserDetailsImpl;
 import com.healthcare.admin.services.AdminService;
 import com.healthcare.patient.model.Patient;
@@ -80,8 +81,7 @@ public class AdminController {
       email = adminDetails.getEmail();
     }
 
-    return ResponseEntity.ok(
-        "JWT: " + jwt + ", ID: " + id + ", Username: " + username + ", Email: " + email);
+    return ResponseEntity.ok(new AdminJWTResponse(jwt, id, username, email));
   }
 
   @Autowired private AdminService adminService;
